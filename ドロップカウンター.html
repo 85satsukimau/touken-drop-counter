@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="icon" href="https://i.imgur.com/bLO4kyN.png" type="image/png">
+  <style>
+    /* 基本のデザイン CSS */
+    body{
+      box-sizing:border-box;
+      min-height:100vh;
+      margin:0;
+      padding:12px;
+      border:8px solid #7a1622;
+      background:#faf6ee;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-weight:300;
+      color:#2c2523;
+    }
+    /* 英数字用のフォントスタイル */
+    .num-style{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-weight:400
+    }
+    /* ヘッダー CSS */
+    header{
+      margin:-12px -12px 10px -12px;
+      padding:10px 8px;
+      border-bottom:2px solid #5a0f17;
+      background:#7a1622;
+      text-align:center;
+    }
+    /* 見出し CSS */
+    h1{
+      margin:0 0 2px 0;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:1.05rem;
+      font-weight:400;
+      letter-spacing:.08em;
+      color:#faf6ee;
+    }
+    
+    
+    /* イベント情報のデザイン　CSS */
+    .ev-info{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      margin-top:2px;
+    }
+    /* イベント名のフォントスタイル　CSS */
+    .ev-name{
+      display:block;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      font-weight:400;
+      letter-spacing:.03em;
+      color:#faf6ee;
+    }
+    /* イベント期間のフォントスタイル CSS */
+    .ev-pd{
+      display:block;
+      margin-top:2px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-size:.65rem;
+      font-weight:300;
+      color:#eaddd7;
+    }
+    /* 指南ボタンのデザイン CSS */
+    .gd-btn{
+      position:absolute;top:2px;right:4px;
+      padding:2px 6px;
+      border:1px solid #1e4d2b;
+      border-radius:4px;
+      cursor:pointer;
+      background:#2c2523;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.7rem;
+      font-weight:400;
+      color:#fff;
+    }
+    /* 指南ボタンを押した際のポップアップ設定 */
+    /* ポップアップ以外を暗くする暗幕の通常時の設定 CSS */
+    .md-ov{
+      position:fixed;top:0;left:0;width:100vw;height:100vh;
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .2s;
+      background:rgba(44,37,35,.6);
+    }
+    /* ポップアップを開くと出現 CSS */
+    .md-ov.open{
+      pointer-events:auto;
+      opacity:1;
+    }
+    /* ポップアップのデザイン CSS */
+    .md-ct{
+      box-sizing:border-box;
+      width:85%;max-width:320px;
+      padding:14px;
+      border:4px solid #7a1622;
+      border-radius:8px;
+      background:#faf6ee;
+    }
+    /* ポップアップのタイトルのフォントスタイル CSS */
+    .md-ttl{
+      margin-bottom:10px;
+      padding-bottom:4px;
+      border-bottom:1px solid rgba(122,22,34,0.2);
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.95rem;
+      font-weight:500;
+      color:#7a1622;
+    }
+    /* ポップアップのリストのフォントスタイル CSS */
+    .md-ol{
+      margin:0;
+      padding-left:18px;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      line-height:1.5;
+    }
+    /* ポップアップリストの各項目のフォントスタイル CSS */
+    .md-ol li{
+      margin-bottom:6px
+    }
+    /* ポップアップの閉じるボタンの設定 CSS */
+    .md-cls{
+      display:block;
+      width:60px;
+      margin:12px auto 0 auto;
+      padding:4px 0;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:#7a1622;font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      color:#faf6ee;
+    }
+    
+    /* タブの設定 */
+    /* タブの外枠のデザイン CSS */
+    .tabs{
+      display:flex;
+      margin-bottom:6px;
+      padding:2px;
+      border:1px solid rgba(122,22,34,.15);
+      border-radius:6px;
+      background:rgba(122,22,34,.05);
+    }
+    /* タブボタンのデフォルトのデザイン CSS */
+    .tab-btn{
+      flex:1;
+      padding:5px;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:none;
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      color:#7a1622;
+    }
+    /* タブボタンを選択した際のデザイン CSS */
+    .tab-btn.active{
+      background:#7a1622;
+      font-weight:500;
+      color:#faf6ee;
+    }
+    /* タブ切り替えの設定（選択していないタブを非表示） CSS */
+    .view-panel{
+      display:none
+    }
+    /* 選択されたタブのみ表示 CSS */
+    .view-panel.active{
+      display:block
+    }
+    
+    /* 検索ボックスの設定 CSS */
+    .search-box{
+      box-sizing:border-box;
+      width:100%;
+      margin-bottom:6px;
+      padding:6px 10px;
+      border:1px solid #c9b9a9;
+      border-radius:6px;
+      outline:none;
+      background:rgba(255,253,250,.9);
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.85rem;
+    }
+
+    /* 小見出し（「イベント限定ドロップ」「通常ドロップ」など）の設定 */
+    .sec-ttl{
+      margin:6px 2px 4px 2px;
+      padding-left:4px;
+      border-left:3px solid #7a1622;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      font-weight:500;
+      color:#7a1622;
+    }
+    
+    /* カウンターの設定 */
+    /* 各刀剣のカードの基本デザイン CSS */
+    .card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:4px;
+      padding:4px 10px;
+      border:1px solid rgba(122,22,34,.15);
+      border-radius:6px;
+      background:rgba(255,253,250,.95);
+    }
+    /* 名前とIDボックスを縦に配置 CSS */
+    .name-box{
+      display:flex;
+      flex-direction:column
+    }
+    /* 名前のフォントデザイン CSS */
+    .name{
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.9rem;
+      font-weight:400;
+    }
+    /* IDのフォントデザイン CSS */
+    .id{
+      margin-top:1px;
+      font-size:.65rem;
+      font-weight:300;
+      color:#8c7672;
+    }
+    /* ボタン領域全体の設定 CSS */
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:8px
+    }
+    /* ボタンの共通デザイン CSS */
+    .btn{
+      width:34px;height:34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:1.1rem;
+      font-weight:400;
+    }
+    /* -ボタンのデザイン CSS */
+    .btn-minus{
+      background:#eaddd7;
+      color:#5a4542
+    }
+    /* +ボタンのデザイン CSS */
+    .btn-plus{
+      background:#7a1622;
+      color:#faf6ee
+    }
+    /* カウント（デフォルト時）のデザイン CSS */
+    .count{
+      min-width:24px;
+      text-align:center;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-size:1.1rem;
+      font-weight:350;
+      color:#6d5652;
+    }
+    /* カウント（1以上時）のデザイン CSS */
+    .count.has-value{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-weight:450;
+      color:#1e4d2b;
+    }
+    
+    /* ドロップ記録タブの設定 */
+    /* 表上部ブロック（合計ドロップ数、コピーボタン、スプシボタン）の設定 CSS */
+    .rk-hdr{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:4px 2px 6px 2px
+    }
+    /* 合計ドロップ数の日本語のフォントデザイン CSS */
+    .tot-sm{
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      color:#1e4d2b;
+    }
+    /* 合計ドロップ数の数字のフォントデザイン CSS */
+    .tot-num{
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.95rem;
+      font-weight:400;
+    }
+    /* ボタンセットの設定 CSS */
+    .hdr-btn-set{
+      display:flex;
+      gap:6px
+    }
+    /* コピーボタン、スプシボタンの設定 CSS */
+    .cp-btn,.ss-btn{
+      display:inline-block;
+      min-width:76px;
+      padding:4px 12px;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:#7a1622;
+      text-align:center;
+      text-decoration:none;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      color:#faf6ee;
+    }
+    /* 表の設定 CSS */
+    .rk-tbl{
+      width:100%;
+      border:1px solid rgba(122,22,34,.15);
+      border-radius:6px;
+      border-collapse:collapse;
+      background:rgba(255,253,250,.95);
+      overflow:hidden;
+      font-size:.8rem
+    }
+    /* 表の見出しの設定 CSS */
+    .rk-tbl th{
+      padding:6px;
+      background:#7a1622;
+      text-align:left;
+      font-weight:400;
+      color:#faf6ee;
+    }
+    /* 表の中身の設定 CSS */
+    .rk-tbl td{
+      padding:6px;border-bottom:1px solid rgba(122,22,34,.1)
+    }
+    /* 表の一番下の行の設定 CSS */
+    .rk-tbl tr:last-child td{
+      border-bottom:none
+    }
+    /* 表の数字のフォントデザイン CSS */
+    .rk-tbl td.rk-num{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:300
+    }
+    /* 表の名前のフォントデザイン CSS */
+    .rk-tbl td.rk-name{
+      font-family:"Yu Mincho","MS Mincho",serif
+    }
+    
+
+    /* 読み込み中メッセージのフォントデザイン cSS */
+    .loading{
+      padding:20px;
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.85rem;
+      color:#6d5652;
+    }
+
+    /* 個別のスプレッドシート */
+    .config-panel {
+      box-sizing: border-box;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 900;
+      padding: 6px 12px;
+      border-top: 2px solid #7a1622;
+      background: #2c2523;
+    }
+    .config-input {
+      flex: 1;
+      padding: 4px 8px;
+      border: 1px solid #7a1622;
+      border-radius: 4px;
+      outline: none;
+      background: #faf6ee;
+      font-size: 0.7rem;
+      color: #2c2523;
+    }
+    .config-btn {
+      padding: 4px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #7a1622;
+      font-family: "Yu Mincho", "MS Mincho", serif;
+      font-size: 0.7rem;
+      color: #faf6ee;
+    }
+
+  </style>
+</head>
+
+
+
+<body>
+  <!-- 基本の構成 -->
+  <!-- デフォルトのヘッダー -->
+  <header>
+    <h1>刀剣乱舞 ドロップカウンター</h1>
+    <div class="ev-info">
+      <div class="ev-name" id="evName">・読込中...・</div>
+      <div class="ev-pd" id="evPeriod"></div>
+      <button class="gd-btn" onclick="toggleModal(true)">指南</button>
+    </div>
+  </header>
+
+  <!-- 指南ボタンのポップアップ -->
+  <div class="md-ov" id="guideModal" onclick="toggleModal(false)">
+    <div class="md-ct" onclick="event.stopPropagation()">
+      <div class="md-ttl">使用方法</div>
+      <ol class="md-ol">
+        <li>スプレッドシートに催物名、開催日、終了日、イベント限定ドロップ刀剣を記入する</li>
+        <li>カウンターでドロップ刀剣をカウント</li>
+        <li>イベントが終了したらドロップ記録から結果をコピー</li>
+        <li>催物記録に貼り付け</li>
+        <li>スプレッドシートのリセットボタンを押す</li>
+      </ol>
+      <button class="md-cls" onclick="toggleModal(false)">閉じる</button>
+    </div>
+  </div>
+
+  <!-- タブ切り替え -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('counter', this)">カウンター</button>
+    <button class="tab-btn" onclick="switchTab('record', this)">ドロップ記録</button>
+  </div>
+
+  <!-- カウンター画面 -->
+  <div class="view-panel active" id="panel-counter">
+    <input type="text" class="search-box" id="searchBox" placeholder="🔍 名前 または No. で検索（全刀剣から検索可）" oninput="onSearch()">
+    <div id="counterContainer">
+      <div class="loading" id="mainMessage">下部に入力欄にあなたの「API URL」を貼り付けて保存してください。</div>
+      <div class="loading">🌸読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- ドロップ記録画面 -->
+  <div class="view-panel" id="panel-record">
+    <div class="rk-hdr">
+      <div class="tot-sm">合計ドロップ数:
+        <span class="tot-num" id="totalCount">0</span> 
+        振
+      </div>
+      <div class="hdr-btn-set">
+        <button class="cp-btn" id="copyBtn" onclick="copyToClipboard()">コピー</button>
+        <a class="ss-btn" id="ssLink" href="#" target="_blank">シートを開く</a>
+      </div>
+    </div>
+    <div id="recordContainer">
+      <table class="rk-tbl">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>刀剣名</th>
+            <th>ドロップ数</th>
+          </tr>
+        </thead>
+        <tbody id="recordTableBody">
+          <!-- 記録データ挿入 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- GASアプリurl入力欄（ページ下部） -->
+  <div class="config-panel">
+    <input type="password" class="config-input" id="gasUrlInput" placeholder="各自のコピーしたGASウェブアプリURL(https://google.com...)を貼り付け">
+    <button class="config-btn" onclick="saveGasUrl()">保存</button>
+  </div>
+
+
+
+  <script>
+    //ここからプログラム JavaScript
+    // 全データをまとめる
+    let allDataList = [];
+    let currentGasUrl = localStorage.getItem('刀剣カウンター_GAS_URL') || '';
+
+    // 🚀 ページが開いた瞬間のタイムライン
+    window.onload = function() {
+      if (currentGasUrl) {
+        document.getElementById('gasUrlInput').value = currentGasUrl;
+        fetchInitialData();
+      }
+    };
+
+    // ユーザーが自分のURLを保存したときの処理
+    function saveGasUrl() {
+      const url = document.getElementById('gasUrlInput').value.trim();
+      if(!url.startsWith('https://google.com')) {
+        alert('正しいGoogle Apps ScriptのウェブアプリURLを入力してください。');
+        return;
+      }
+      localStorage.setItem('刀剣カウンター_GAS_URL', url);
+      currentGasUrl = url;
+      alert('URLを設定しました！データを読み込みます。');
+      fetchInitialData();
+    }
+
+    // GitHubとGASを安全に有線接続
+    function fetchInitialData() {
+      document.getElementById('evName').innerText = '・読込中...・';
+      document.getElementById('counterContainer').innerHTML = '<div class="loading">スプレッドシートからデータを読み込んでいます...</div>';
+      // JSONPでGASからデータを安全に引っ張る
+      const script = document.createElement('script');
+      script.src = currentGasUrl + '?callback=initializeUI';
+      document.body.appendChild(script);
+      // 読み込み終わったらゴミタグを自動で掃除する
+      script.onload = () => document.body.removeChild(script);
+    }
+
+    // データを反映
+    function initializeUI(data) {
+      // エラー時
+      if (data.error) {
+        document.getElementById('counterContainer').innerHTML = `<div class="loading">${data.error}</div>`;
+        return;
+      }
+      // イベント名を反映
+      document.getElementById('evName').innerText = '・' + data.eventName + '・';
+      // イベント開催期間を反映
+      document.getElementById('evPeriod').innerText = data.period || '';
+      // スプレッドシートのurlがある場合シートを開くボタンに反映
+      if(data.url) document.getElementById('ssLink').href = data.url;
+      
+      // 刀剣男士の順番を保持する
+      allDataList = data.list.map((item, index) => {
+        item.originalOrder = index;
+        return item;
+      });
+      
+      // 次の関数を実行
+      renderCounter();
+      renderRecord();
+    }
+
+    // 検索ボックスに入力があった場合の挙動
+    function onSearch() { renderCounter(); }
+
+    // カウンターに各刀剣のカードを配置
+    function renderCounter() {
+      // 検索ボックスの中身=query
+      const query = document.getElementById('searchBox').value.trim().toLowerCase();
+      // カウンター領域=container
+      const container = document.getElementById('counterContainer');
+      
+      // カウンター領域の設定
+      container.innerHTML = '';
+      // フィルターで表示される刀剣のデータリスト=filtered
+      let filtered = allDataList;
+      // 検索が空ならイベント限定ドロップと通常ドロップを表示
+      if (!query) {
+        filtered = allDataList.filter(item => item.isEvent || item.isDefault);
+      } else {
+        // 検索欄と一致する名前かIDの男士を絞り込む
+        filtered = allDataList.filter(item => 
+          item.name.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
+        );
+      }
+      // フィルターで抽出された男士の順番（イベント限定>通常、ID順）
+      filtered.sort((a, b) => {
+        if (a.isEvent && !b.isEvent) return -1;
+        if (!a.isEvent && b.isEvent) return 1;
+        if (a.isDefault && !b.isDefault) return -1;
+        if (!a.isDefault && b.isDefault) return 1;
+        return a.originalOrder - b.originalOrder;
+      });
+     // 該当男士が0の時の表示
+      if(filtered.length === 0) {
+        container.innerHTML = '<div class="loading">🌸読み込み中...</div>';
+        return;
+      }
+      // 小見出し用の枠=currentSection
+      let currentSection = '';
+      // 全てのデータに対して
+      filtered.forEach(item => {
+        // 全ての男士のデータにラベリング
+        let sectionName = 'その他の刀剣';
+        if (item.isEvent) sectionName = 'イベント限定ドロップ';
+        else if (item.isDefault) sectionName = '通常ドロップ';
+        // ラベルの変更地点に小見出しを出現させる
+        if (currentSection !== sectionName && !query) {
+          currentSection = sectionName;
+          const header = document.createElement('div');
+          header.className = 'sec-ttl';
+          header.innerText = currentSection;
+          container.appendChild(header);
+        }
+        // カウンターの各刀剣のカードの設定
+        const card = document.createElement('div');
+        card.className = 'card';
+        // ボタン領域および名前、IDを配置
+        card.innerHTML = `
+          <div class="name-box">
+            <span class="name">${item.name}</span>
+            <span class="id num-style"">No.${item.id}</span>
+          </div>
+          <div class="actions">
+            <button class="btn btn-minus" onclick="changeCount('${item.name}', -1, '${item.id}')">－</button>
+            <span class="count ${item.count > 0 ? 'has-value' : ''}" id="count-${item.id}">${item.count}</span>
+            <button class="btn btn-plus" onclick="changeCount('${item.name}', 1, '${item.id}')">＋</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ドロップ記録の挙動
+    function renderRecord() {
+      // 表を初期化
+      const tbody = document.getElementById('recordTableBody');
+      tbody.innerHTML = '';
+      // ドロップした男士を多い順に並べる（イベント限定ドロップを上に）
+      const loggedItems = allDataList.filter(item => item.count > 0);
+      loggedItems.sort((a, b) => {
+        if(b.count !== a.count){return b.count - a.count;}
+        if(a.isEvent && !b.isEvent) return -1;
+        if(!a.isEvent && b.isEvent) return 1;
+        return a.originalOrder - b.originalOrder;
+      });
+      // 合計ドロップ数の枠を用意
+      let total = 0;
+      // ドロップがない場合
+      if (loggedItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6d5652;">まだドロップ記録はありません</td></tr>';
+      } else {
+        // ドロップがある場合
+        loggedItems.forEach(item => {
+          // 合計ドロップ数に加算
+          total += item.count;
+          const tr = document.createElement('tr');
+          // 表にID,名前,ドロップ数を追加
+          tr.innerHTML = `
+            <td class="rk-num">${item.id}</td>
+            <td class="rk-name">${item.name}</td>
+            <td class="rk-num" style="font-weight:500;color:#1e4d2b;">${item.count}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      // 合計ドロップ数を表示
+      document.getElementById('totalCount').innerText = total;
+    }
+
+    // カウンターの実働部
+    function changeCount(name, delta, id) {
+      // ボタンが押された男士のデータを特定
+      const item = allDataList.find(i => i.id === id);
+      if (!item) return;
+      // マイナスにならないようにする
+      const newCount = Math.max(0, item.count + delta);
+      if (item.count === 0 && delta === -1) return;
+      item.count = newCount;
+      // 画面の書き換え
+      const countEl = document.getElementById(`count-${id}`);
+      if (countEl) {
+        // 数字の書き換え
+        countEl.innerText = newCount;
+        // 色の書き換え
+        if (newCount > 0) countEl.classList.add('has-value');
+        else countEl.classList.remove('has-value');
+      }
+      // ドロップ記録を合わせて更新
+      renderRecord();
+        // 各自のGASのupdate命令を電波で飛ばすAPI命令
+       if (currentGasUrl) {
+        const script = document.createElement('script');
+        script.src = `${currentGasUrl}?action=update&name=${encodeURIComponent(name)}&delta=${delta}&id=${id}`;
+        document.body.appendChild(script);
+        script.onload = () => document.body.removeChild(script);
+      }
+    }
+
+
+    // タブの切り替え
+    function switchTab(tabName, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`panel-${tabName}`).classList.add('active');
+    }
+
+    // 指南の表示/閉じる
+    function toggleModal(show) {
+      const modal = document.getElementById('guideModal');
+      if (show) modal.classList.add('open');
+      else modal.classList.remove('open');
+    }
+
+    // 表をコピーする
+    function copyToClipboard() {
+      const loggedItems = allDataList.filter(item => item.count > 0);
+      const btn = document.getElementById('copyBtn');
+      if (loggedItems.length === 0) { return; }
+      // 見出し
+      let text = "No.\t刀剣名\tドロップ数\n";
+      // ドロップ数が多い順にコピー
+      loggedItems.sort((a, b) => {
+        if(b.count !== a.count){return b.count - a.count;}
+        if(a.isEvent && !b.isEvent) return -1;
+        if(!a.isEvent && b.isEvent) return 1;
+        return a.originalOrder - b.originalOrder;
+      }).forEach(item => {
+        text += `${item.id}\t${item.name}\t${item.count}\n`;
+      });
+      // クリップボードに書き込む
+      navigator.clipboard.writeText(text).then(() => {
+        // ボタンの文字を変更
+        btn.innerText = "コピー完了";
+        setTimeout(() => {
+          btn.innerText = "コピー";
+        }, 1500);
+      }).catch(err => { console.error('コピー失敗'); });
+    }
+
+  </script>
+</body>
+</html>
