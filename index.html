@@ -503,10 +503,6 @@
     // ユーザーが自分のURLを保存したときの処理
     function saveGasUrl() {
       const url = document.getElementById('gasUrlInput').value.trim();
-      if(!url.startsWith('https://google.com')) {
-        alert('正しいGoogle Apps ScriptのウェブアプリURLを入力してください。');
-        return;
-      }
       localStorage.setItem('刀剣カウンター_GAS_URL', url);
       currentGasUrl = url;
       alert('URLを設定しました！データを読み込みます。');
