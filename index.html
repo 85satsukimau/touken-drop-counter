@@ -9,8 +9,11 @@
     body{
       box-sizing:border-box;
       min-height:100vh;
+      display: flex;
+      flex-direction: column;
       margin:0;
       padding:12px;
+      padding-bottom:40 px;
       border:8px solid #7a1622;
       background:#faf6ee;
       font-family:"Yu Mincho","MS Mincho",serif;
@@ -32,7 +35,7 @@
     }
     /* 見出し CSS */
     h1{
-      margin:0 0 2px 0;
+      margin:0 0 7px 0;
       font-family:"Yu Mincho","MS Mincho",serif;
       font-size:1.05rem;
       font-weight:400;
@@ -402,6 +405,15 @@
   <!-- 基本の構成 -->
   <!-- デフォルトのヘッダー -->
   <header>
+    <span style="
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.55rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: #eaddd7;">
+      - 刀剣乱舞-ONLINE- 非公式ファンツール -
+    </span>
     <h1>刀剣乱舞 ドロップカウンター</h1>
     <div class="ev-info">
       <div class="ev-name" id="evName">・読込中...・</div>
@@ -410,6 +422,7 @@
       <button class="gd-btn" onclick="toggleModal(true)">指南</button>
     </div>
   </header>
+
 
   <!-- 指南ボタンのポップアップ -->
   <div class="md-ov" id="guideModal" onclick="toggleModal(false)">
@@ -522,7 +535,15 @@
     </div>
   </div>
 
-
+<footer style="margin-top: auto !important; margin: 20px -12px -12px -12px; padding: 12px 8px; border-top: 1px solid rgba(122, 22, 34, 0.1); background: rgba(122, 22, 34, 0.02); text-align: center;">
+    <p style="margin: 0 0 4px 0; font-size: 0.6rem; color: #8c7672; line-height: 1.4; letter-spacing: 0.02em; word-break: keep-all;">
+      当ツールは個人が開発した非公式のファンメイド（二次創作）ツールであり、<wbr>
+      「刀剣乱舞」の版権元および<wbr>運営会社様とは一切関係ありません。
+    </p>
+    <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
+      © 2026 白烏城システム開発
+    </p>
+  </footer>
 
   <script>
     //ここからプログラム JavaScript
@@ -530,7 +551,7 @@
     let allDataList = [];
     let currentGasUrl = localStorage.getItem('刀剣カウンター_GAS_URL') || '';
 
-    // 🚀 ページが開いた瞬間のタイムライン
+    // ページが開いた瞬間のタイムライン
     window.onload = function() {
       if (currentGasUrl) {
         document.getElementById('gasUrlInput').value = currentGasUrl;
@@ -776,5 +797,6 @@
     }
 
   </script>
+  
 </body>
 </html>
