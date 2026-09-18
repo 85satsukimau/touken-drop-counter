@@ -431,8 +431,8 @@
       <ol class="md-ol">
         <li>スプレッドシートに催物名、開催日、終了日、イベント限定ドロップ刀剣を記入する</li>
         <li>カウンターでドロップ刀剣をカウント</li>
-        <li>イベントが終了したらドロップ記録から結果をコピー</li>
-        <li>催物記録に貼り付け</li>
+        <li>イベントが終了したらドロップ記録タブの「コピー」ボタンから結果をコピー</li>
+        <li>記録用のエクセルなどに貼り付け</li>
         <li>スプレッドシートのリセットボタンを押す</li>
       </ol>
       <button class="md-cls" onclick="toggleModal(false)">閉じる</button>
@@ -490,27 +490,23 @@
         <p style="
           font-size: 0.7rem; color: #7a1622; margin: 0 0 6px 0; font-weight: 500;
           ">💡 初めて使用される方へ</p>
-        <a href="https://docs.google.com/spreadsheets/d/1yLpWpCFs40prtg26b2jhfCe4l1gXIRuLtY4eI9i6jrs/copy" target="_blank" class="config-template-btn">
+        <a href="https://docs.google.com/spreadsheets/d/1eWn-RLpsu_b-dz2MAWwKJCenP8LslAzI5T1tJAcoF1Y/copy" target="_blank" class="config-template-btn">
           【必須】スプレッドシートのコピーを作成</a>
         <!-- GASアプリURLの取得方法 -->
+         <button onclick="document.getElementById('gasHowTo').style.display = document.getElementById('gasHowTo').style.display === 'none' ? 'block' : 'none'" class="config-template-btn" 
+        style="border-color: #6d5652; background: rgba(44,37,35,0.03); color: #6d5652 !important;
+        ">スプレッドシートの有効化の方法を見る</button>
+        <div id="gasHowTo" style="width: 85%; display: none; margin: 6px auto 0 auto; padding: 6px; border: 1px solid rgba(122,22,34,0.1); border-radius: 4px; background: rgba(122,22,34,0.02); text-align: left; font-size: 0.65rem; line-height: 1.4; color: #5a4542;">
+          1. コピーしたシートのメニューから<br><b>「拡張機能」➔「Apps Script」</b>を開く<br>
+          2. 左メニューの時計マーク<b>「⏰ トリガー」</b>を押す<br>
+          3. 右下の<b>「＋ トリガーを追加」</b>を押す<br>
+          4. 実行する関数を<b>「onEditInstalled」</b>、イベントの種類を<b>「編集時」</b>にして保存を押す<br>
+          5. Googleの警告画面が出たら<b>「詳細」➔「刀剣カウンターに移動」➔「許可」</b>の順に進む
+        </div>
         <button onclick="document.getElementById('gasHowTo').style.display = document.getElementById('gasHowTo').style.display === 'none' ? 'block' : 'none'" class="config-template-btn" 
-        style="
-        border-color: #6d5652;
-        background: rgba(44,37,35,0.03);
-        color: #6d5652 !important;
+        style="border-color: #6d5652; background: rgba(44,37,35,0.03); color: #6d5652 !important;
         ">GASウェブアプリURLの取得方法を見る</button>
-        <div id="gasHowTo" style="
-        width: 85%;
-        display: none;
-        margin: 6px auto 0 auto;
-        padding: 6px;
-        border: 1px solid rgba(122,22,34,0.1);
-        border-radius: 4px;
-        background: rgba(122,22,34,0.02);
-        text-align: left;
-        font-size: 0.65rem;
-        line-height: 1.4;
-        color: #5a4542;">
+        <div id="gasHowTo" style="width: 85%; display: none; margin: 6px auto 0 auto; padding: 6px; border: 1px solid rgba(122,22,34,0.1); border-radius: 4px; background: rgba(122,22,34,0.02); text-align: left; font-size: 0.65rem; line-height: 1.4; color: #5a4542;">
           1. コピーしたシートのメニューから<br><b>「拡張機能」➔「Apps Script」</b>を開く<br>
           2. 右上の青い<b>「デプロイ」➔「新しいデプロイ」</b>を押す<br>
           3. 歯車マークが<b>「ウェブアプリ」</b>なのを確認<br>
