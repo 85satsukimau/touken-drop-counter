@@ -580,13 +580,23 @@
     function fetchInitialData() {
       document.getElementById('evName').innerText = '・読込中...・';
       document.getElementById('counterContainer').innerHTML = '<div class="loading">スプレッドシートからデータを読み込んでいます...</div>';
-      // JSONPでGASからデータを安全に引っ張る
-      const script = document.createElement('script');
-      script.src = currentGasUrl + '?callback=initializeUI';
-      document.body.appendChild(script);
-      // 読み込み終わったらゴミタグを自動で掃除する
-      script.onload = () => document.body.removeChild(script);
+      // Googleのセキュリティをすり抜ける no-cors モードでGASを呼び出す
+      fetch(currentGasUrl + '?action=get', {
+        method: 'GET',
+        mode: 'no-cors'
+      })
+      .then(() => {
+        // no-corsでは中身が直接読めないため、予備の通信(JSONP)へバトンタッチ
+        const script = document.createElement('script');
+        script.src = currentGasUrl + '?callback=initializeUI';
+        document.body.appendChild(script);
+        script.onload = () => document.body.removeChild(script);
+      })
+      .catch(err => {
+        document.getElementById('counterContainer').innerHTML = '<div class="loading">通信が遮断されました。数秒後に再試行してください</div>';
+      });
     }
+
 
     // データを反映
     function initializeUI(data) {
@@ -741,15 +751,17 @@
       }
       // ドロップ記録を合わせて更新
       renderRecord();
-        // 各自のGASのupdate命令を電波で飛ばすAPI命令
+        // 各自のGASのupdate命令を飛ばすAPI命令
        if (currentGasUrl) {
-        const script = document.createElement('script');
-        script.src = `${currentGasUrl}?action=update&name=${encodeURIComponent(name)}&delta=${delta}&id=${id}`;
-        document.body.appendChild(script);
-        script.onload = () => document.body.removeChild(script);
+        const targetUrl = `${currentGasUrl}?action=update&name=${encodeURIComponent(name)}&delta=${delta}&id=${id}`;
+        // ブラウザのブロックを無効化する命令
+        fetch(targetUrl, {
+          method: 'GET',
+          mode: 'no-cors'
+        })
+        .catch(err => console.error("通信割り込み発生"));
       }
     }
-
 
     // タブの切り替え
     function switchTab(tabName, btn) {
