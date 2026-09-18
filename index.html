@@ -367,42 +367,6 @@
       color:#6d5652;
     }
 
-    /* 個別のスプレッドシート */
-    .config-panel {
-      box-sizing: border-box;
-      width: 100%;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 900;
-      padding: 6px 12px;
-      border-top: 2px solid #7a1622;
-      background: #2c2523;
-    }
-    .config-input {
-      flex: 1;
-      padding: 4px 8px;
-      border: 1px solid #7a1622;
-      border-radius: 4px;
-      outline: none;
-      background: #faf6ee;
-      font-size: 0.7rem;
-      color: #2c2523;
-    }
-    .config-btn {
-      padding: 4px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      background: #7a1622;
-      font-family: "Yu Mincho", "MS Mincho", serif;
-      font-size: 0.7rem;
-      color: #faf6ee;
-    }
-
   </style>
 </head>
 
@@ -416,6 +380,7 @@
     <div class="ev-info">
       <div class="ev-name" id="evName">・読込中...・</div>
       <div class="ev-pd" id="evPeriod"></div>
+      <button class="gd-btn" style="right: 42px;" onclick="toggleConfigModal(true)">設定</button>
       <button class="gd-btn" onclick="toggleModal(true)">指南</button>
     </div>
   </header>
@@ -478,16 +443,25 @@
     </div>
   </div>
 
-  <!-- GASアプリurl入力欄（ページ下部） -->
-  <div class="config-panel">
-    <input type="text" class="config-input" id="gasUrlInput" placeholder="各自のコピーしたGASウェブアプリURL(https://google.com...)を貼り付け">
-    <span id="configMessage" style="
-    display: none;
-    font-size: 0.7rem;
-    font-weight: 400;
-    color: #eaddd7;
-    "></span>
-    <button class="config-btn" onclick="saveGasUrl()">保存</button>
+  <!-- GASアプリurl入力欄 -->
+   <div class="md-ov" id="configModal" onclick="toggleConfigModal(false)">
+    <div class="md-ct" onclick="event.stopPropagation()">
+      <div class="md-ttl">通信設定</div>
+      <p style="font-size: 0.75rem; color: #6d5652; margin-bottom: 10px; line-height: 1.4;">
+        各自のコピーしたGASウェブアプリURL（末尾が /exec のもの）を貼り付けて保存してください。
+      </p>
+      
+      <!-- 文字を隠さない text 形式の入力欄 -->
+      <input type="text" class="search-box" id="gasUrlInput" placeholder="https://google.com..." style="margin-bottom: 8px;">
+      
+      <!-- 保存完了のメッセージを上品に表示する部屋 -->
+      <div id="configMessage" style="color: #1e4d2b; font-size: 0.75rem; font-weight: 500; text-align: center; margin-bottom: 8px; display: none;"></div>
+      
+      <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+        <button class="md-cls" style="margin: 0; min-width: 70px;" onclick="saveGasUrl()">保存</button>
+        <button class="md-cls" style="margin: 0; min-width: 70px; background: #eaddd7; color: #5a4542;" onclick="toggleConfigModal(false)">閉じる</button>
+      </div>
+    </div>
   </div>
 
 
@@ -513,11 +487,18 @@
       localStorage.setItem('刀剣カウンター_GAS_URL', url);
       currentGasUrl = url;
       msgEl.innerText = "🌸 設定を保存しました。再読込中...";
-      msgEl.style.display = "inline-block";
+      msgEl.style.display = "block";
       setTimeout(() => {
         msgEl.style.display = "none";
-      }, 2000);
+        toggleConfigModal(false);
+      }, 1200);
       fetchInitialData();
+    }
+
+    function toggleConfigModal(show) {
+      const modal = document.getElementById('configModal');
+      if (show) modal.classList.add('open');
+      else modal.classList.remove('open');
     }
 
     // GitHubとGASを安全に有線接続
