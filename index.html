@@ -480,7 +480,13 @@
 
   <!-- GASアプリurl入力欄（ページ下部） -->
   <div class="config-panel">
-    <input type="password" class="config-input" id="gasUrlInput" placeholder="各自のコピーしたGASウェブアプリURL(https://google.com...)を貼り付け">
+    <input type="text" class="config-input" id="gasUrlInput" placeholder="各自のコピーしたGASウェブアプリURL(https://google.com...)を貼り付け">
+    <span id="configMessage" style="
+    display: none;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: #eaddd7;
+    "></span>
     <button class="config-btn" onclick="saveGasUrl()">保存</button>
   </div>
 
@@ -503,9 +509,14 @@
     // ユーザーが自分のURLを保存したときの処理
     function saveGasUrl() {
       const url = document.getElementById('gasUrlInput').value.trim();
+      const msgEl = document.getElementById('configMessage');
       localStorage.setItem('刀剣カウンター_GAS_URL', url);
       currentGasUrl = url;
-      alert('URLを設定しました！データを読み込みます。');
+      msgEl.innerText = "🌸 設定を保存しました。再読込中...";
+      msgEl.style.display = "inline-block";
+      setTimeout(() => {
+        msgEl.style.display = "none";
+      }, 2000);
       fetchInitialData();
     }
 
