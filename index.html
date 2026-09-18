@@ -68,7 +68,7 @@
       font-weight:300;
       color:#eaddd7;
     }
-    /* 指南ボタンのデザイン CSS */
+    /* 設定/指南ボタンのデザイン CSS */
     .gd-btn{
       position:absolute;top:2px;right:4px;
       padding:2px 6px;
@@ -81,7 +81,7 @@
       font-weight:400;
       color:#fff;
     }
-    /* 指南ボタンを押した際のポップアップ設定 */
+    /* 設定/指南ボタンを押した際のポップアップ設定 */
     /* ポップアップ以外を暗くする暗幕の通常時の設定 CSS */
     .md-ov{
       position:fixed;top:0;left:0;width:100vw;height:100vh;
@@ -140,9 +140,34 @@
       border:none;
       border-radius:4px;
       cursor:pointer;
-      background:#7a1622;font-family:"Yu Mincho","MS Mincho",serif;
+      background:#7a1622;
+      font-family:"Yu Mincho","MS Mincho",serif;
       font-size:.75rem;
       color:#faf6ee;
+    }
+
+    /* 設定の「スプレッドシートをコピー」ボタンの設定 CSS */
+    .config-template-btn {
+      width: 85%;
+      display: inline-block;
+      padding: 5px 0;
+      border: 1px solid #7a1622;
+      border-radius: 4px;
+      background: rgba(122, 22, 34, 0.03);
+      transition: background 0.2s;
+      text-align: center;
+      text-decoration: none !important;
+      font-family: "Yu Mincho", "MS Mincho", serif;
+      font-size: 0.7rem !important;
+      font-weight: 500;
+      line-height: 1.2;
+      color: #7a1622 !important;
+    }
+
+    /* ボタンの上にマウスが乗ったときの設定 */
+    .config-template-btn:hover {
+      background: rgba(122, 22, 34, 0.08);
+      text-decoration: none !important;     /* マウスが乗ったときの下線も絶対に阻止 */
     }
     
     /* タブの設定 */
@@ -448,6 +473,38 @@
    <div class="md-ov" id="configModal" onclick="toggleConfigModal(false)">
     <div class="md-ct" onclick="event.stopPropagation()">
       <div class="md-ttl">通信設定</div>
+      <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed rgba(122,22,34,0.15); text-align: center;">
+        <p style="
+          font-size: 0.7rem; color: #7a1622; margin: 0 0 6px 0; font-weight: 500;
+          ">💡 初めて使用される方へ</p>
+        <a href="https://docs.google.com/spreadsheets/d/1yLpWpCFs40prtg26b2jhfCe4l1gXIRuLtY4eI9i6jrs/copy" target="_blank" class="config-template-btn">
+          【必須】スプレッドシートのコピーを作成</a>
+        <!-- GASアプリURLの取得方法 -->
+        <button onclick="document.getElementById('gasHowTo').style.display = document.getElementById('gasHowTo').style.display === 'none' ? 'block' : 'none'" class="config-template-btn" 
+        style="
+        border-color: #6d5652;
+        background: rgba(44,37,35,0.03);
+        color: #6d5652 !important;
+        ">GASウェブアプリURLの取得方法を見る</button>
+        <div id="gasHowTo" style="
+        width: 85%;
+        display: none;
+        margin: 6px auto 0 auto;
+        padding: 6px;
+        border: 1px solid rgba(122,22,34,0.1);
+        border-radius: 4px;
+        background: rgba(122,22,34,0.02);
+        text-align: left;
+        font-size: 0.65rem;
+        line-height: 1.4;
+        color: #5a4542;">
+          1. コピーしたシートのメニューから<br><b>「拡張機能」➔「Apps Script」</b>を開く<br>
+          2. 右上の青い<b>「デプロイ」➔「新しいデプロイ」</b>を押す<br>
+          3. 歯車マークが<b>「ウェブアプリ」</b>なのを確認<br>
+          4. アクセスできるユーザーを<b>「全員(Anyone)」</b>に変更してデプロイを押す<br>
+          5. 発行された<b>「ウェブアプリURL」</b>をコピー
+        </div>
+      </div>
       <p style="font-size: 0.75rem; color: #6d5652; margin-bottom: 10px; line-height: 1.4;">
         各自のコピーしたGASウェブアプリURL（末尾が /exec のもの）を貼り付けて保存してください。
       </p>
