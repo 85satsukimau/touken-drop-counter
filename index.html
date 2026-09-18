@@ -67,7 +67,7 @@
       font-weight:300;
       color:#eaddd7;
     }
-    /* 指南ボタンのデザイン CSS */
+    /* 設定/指南ボタンのデザイン CSS */
     .gd-btn{
       position:absolute;top:2px;right:4px;
       padding:2px 6px;
@@ -80,7 +80,18 @@
       font-weight:400;
       color:#fff;
     }
-    /* 指南ボタンを押した際のポップアップ設定 */
+    /* 設定ボタンのピンポイント位置 CSS */
+    .config-btn-pos {
+      top: 2px;
+      right: 4px;
+    }
+    /* 指南ボタンのピンポイント位置 CSS */
+    .guide-btn-pos {
+      top: 24px;
+      right: 4px;
+    }
+
+    /* 設定/指南ボタンを押した際のポップアップ設定 */
     /* ポップアップ以外を暗くする暗幕の通常時の設定 CSS */
     .md-ov{
       position:fixed;top:0;left:0;width:100vw;height:100vh;
@@ -380,8 +391,8 @@
     <div class="ev-info">
       <div class="ev-name" id="evName">・読込中...・</div>
       <div class="ev-pd" id="evPeriod"></div>
-      <button class="gd-btn" style="right: 42px;" onclick="toggleConfigModal(true)">設定</button>
-      <button class="gd-btn" onclick="toggleModal(true)">指南</button>
+      <button class="gd-btn config-btn-pos" onclick="toggleConfigModal(true)">設定</button>
+      <button class="gd-btn guide-btn-pos" onclick="toggleModal(true)">指南</button>
     </div>
   </header>
 
@@ -410,7 +421,7 @@
   <div class="view-panel active" id="panel-counter">
     <input type="text" class="search-box" id="searchBox" placeholder="🔍 名前 または No. で検索（全刀剣から検索可）" oninput="onSearch()">
     <div id="counterContainer">
-      <div class="loading" id="mainMessage">下部に入力欄にあなたの「API URL」を貼り付けて保存してください。</div>
+      <div class="loading" id="mainMessage">設定からあなたのGASウェブアプリURLを貼り付けて保存してください。</div>
       <div class="loading">🌸読み込み中...</div>
     </div>
   </div>
