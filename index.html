@@ -514,8 +514,7 @@
   <div class="view-panel active" id="panel-counter">
     <input type="text" class="search-box" id="searchBox" placeholder="🔍 名前 または No. で検索（全刀剣から検索可）" oninput="onSearch()">
     <div id="counterContainer">
-      <div class="loading" id="mainMessage">設定からあなたのGASウェブアプリURLを貼り付けて保存してください。</div>
-      <div class="loading">🌸読み込み中...</div>
+      <div class="loading" id="mainMessage" style="font-size: .9rem; ">⚠︎ 読み込めるデータが存在しません。右上の「設定」からあなたのGASウェブアプリURLを登録してください。</div>
     </div>
   </div>
 
@@ -659,7 +658,7 @@
     // GitHubとGASを安全に有線接続
     function fetchInitialData() {
       document.getElementById('evName').innerText = '・読込中...・';
-      document.getElementById('counterContainer').innerHTML = '<div class="loading">スプレッドシートからデータを読み込んでいます...</div>';
+      document.getElementById('counterContainer').innerHTML = '<div class="loading">🌸スプレッドシートからデータを読み込んでいます...</div>';
       // Googleのセキュリティをすり抜ける no-cors モードでGASを呼び出す
       fetch(currentGasUrl + '?action=get', {
         method: 'GET',
