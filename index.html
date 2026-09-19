@@ -4,6 +4,9 @@
 <head>
   <base target="_top">
   <link rel="icon" href="https://i.imgur.com/bLO4kyN.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>刀剣カウンター</title>
+  
   <style>
     /* 基本のデザイン CSS */
     body{
@@ -84,6 +87,7 @@
       font-weight:400;
       color:#fff;
     }
+
     /* 設定/指南ボタンを押した際のポップアップ設定 */
     /* ポップアップ以外を暗くする暗幕の通常時の設定 CSS */
     .md-ov{
@@ -124,8 +128,9 @@
     }
     /* ポップアップのリストのフォントスタイル CSS */
     .md-ol{
-      margin:0;
+      margin-top: 12px;
       padding-left:18px;
+      text-align: left;
       font-family:"Yu Mincho","MS Mincho",serif;
       font-size:.75rem;
       line-height:1.5;
@@ -137,8 +142,43 @@
     /* ポップアップの閉じるボタンの設定 CSS */
     .md-cls{
       display:block;
-      width:60px;
-      margin:12px auto 0 auto;
+      min-width:70px;
+      margin:0 auto;
+      padding:4px 0;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:#eaddd7;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      color:#5a4542;
+    }
+
+    /* 設定ポップアップの設定 CSS */
+    /* 保存完了メッセージの設定 CSS */
+    .configMessage{
+      display: none;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1e4d2b;
+    }
+    /* 保存ボタンを置く箱の設定 */
+    .savebtn{
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(122,22,34,0.15);
+    }
+    /* 保存ボタンの設定 */
+    .md-save{
+      display:block;
+      min-width:70px;
+      margin:0;
       padding:4px 0;
       border:none;
       border-radius:4px;
@@ -148,8 +188,12 @@
       font-size:.75rem;
       color:#faf6ee;
     }
-
-    /* 設定の「スプレッドシートをコピー」ボタンの設定 CSS */
+    /* 区切り線 */
+    .setting-divider{
+      border-bottom: 1px dashed rgba(122,22,34,0.15);
+      text-align: center;
+    }
+    /* 「スプレッドシートをコピー」ボタンの設定 CSS */
     .config-template-btn {
       width: 85%;
       display: inline-block;
@@ -165,6 +209,17 @@
       font-weight: 500;
       line-height: 1.2;
       color: #7a1622 !important;
+    }
+    /* タップで表示されるサブリストの設定 */
+    .md-sub-ol{
+      margin-top: 6px;
+      padding-left: 20px;
+      font-size: .65rem;
+      line-height:1.4;
+    }
+    /* サブリストのフォントスタイル CSS */
+    .md-sub-ol li{
+      margin-bottom:6px
     }
 
     /* ボタンの上にマウスが乗ったときの設定 */
@@ -482,51 +537,66 @@
     </div>
   </div>
 
-  <!-- GASアプリurl入力欄 -->
+
+  <!-- 設定ボタンポップアップ -->
    <div class="md-ov" id="configModal" onclick="toggleConfigModal(false)">
     <div class="md-ct" onclick="event.stopPropagation()">
       <div class="md-ttl">通信設定</div>
-      <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed rgba(122,22,34,0.15); text-align: center;">
-        <p style="
-          font-size: 0.7rem; color: #7a1622; margin: 0 0 6px 0; font-weight: 500;
-          ">💡 初めて使用される方へ</p>
-        <a href="https://docs.google.com/spreadsheets/d/1eWn-RLpsu_b-dz2MAWwKJCenP8LslAzI5T1tJAcoF1Y/copy" target="_blank" class="config-template-btn">
-          【必須】スプレッドシートのコピーを作成</a>
-        <!-- GASアプリURLの取得方法 -->
-         <button onclick="document.getElementById('ssTriggerHowTo').style.display = document.getElementById('ssTriggerHowTo').style.display === 'none' ? 'block' : 'none'" class="config-template-btn" 
-        style="border-color: #6d5652; background: rgba(44,37,35,0.03); color: #6d5652 !important;
-        ">スプレッドシートの有効化の方法を見る</button>
-        <div id="ssTriggerHowTo" style="width: 85%; display: none; margin: 6px auto 0 auto; padding: 6px; border: 1px solid rgba(122,22,34,0.1); border-radius: 4px; background: rgba(122,22,34,0.02); text-align: left; font-size: 0.65rem; line-height: 1.4; color: #5a4542;">
-          1. コピーしたシートのメニューから<br><b>「拡張機能」➔「Apps Script」</b>を開く<br>
-          2. 左メニューの時計マーク<b>「⏰ トリガー」</b>を押す<br>
-          3. 右下の<b>「＋ トリガーを追加」</b>を押す<br>
-          4. 実行する関数を<b>「onEditInstalled」</b>、イベントの種類を<b>「編集時」</b>にして保存を押す<br>
-          5. Googleの警告画面が出たら<b>「詳細」➔「刀剣カウンターに移動」➔「許可」</b>の順に進む
-        </div>
-        <button onclick="document.getElementById('gasHowTo').style.display = document.getElementById('gasHowTo').style.display === 'none' ? 'block' : 'none'" class="config-template-btn" 
-        style="border-color: #6d5652; background: rgba(44,37,35,0.03); color: #6d5652 !important;
-        ">GASウェブアプリURLの取得方法を見る</button>
-        <div id="gasHowTo" style="width: 85%; display: none; margin: 6px auto 0 auto; padding: 6px; border: 1px solid rgba(122,22,34,0.1); border-radius: 4px; background: rgba(122,22,34,0.02); text-align: left; font-size: 0.65rem; line-height: 1.4; color: #5a4542;">
-          1. コピーしたシートのメニューから<br><b>「拡張機能」➔「Apps Script」</b>を開く<br>
-          2. 右上の青い<b>「デプロイ」➔「新しいデプロイ」</b>を押す<br>
-          3. 歯車マークが<b>「ウェブアプリ」</b>なのを確認<br>
-          4. アクセスできるユーザーを<b>「全員(Anyone)」</b>に変更してデプロイを押す<br>
-          5. 発行された<b>「ウェブアプリURL」</b>をコピー
-        </div>
-      </div>
-      <p style="font-size: 0.75rem; color: #6d5652; margin-bottom: 10px; line-height: 1.4;">
+      <p style="margin-bottom: 10px; text-align: center; font-size: 0.75rem; line-height: 1.4; color: #6d5652;">
         各自のコピーしたGASウェブアプリURL（末尾が /exec のもの）を貼り付けて保存してください。
       </p>
-      
-      <!-- 文字を隠さない text 形式の入力欄 -->
-      <input type="text" class="search-box" id="gasUrlInput" placeholder="https://google.com..." style="margin-bottom: 8px;">
-      
-      <!-- 保存完了のメッセージを上品に表示する部屋 -->
-      <div id="configMessage" style="color: #1e4d2b; font-size: 0.75rem; font-weight: 500; text-align: center; margin-bottom: 8px; display: none;"></div>
+      <!--入力欄 -->
+      <input type="text" class="search-box" id="gasUrlInput" placeholder="https://google.com..." style="margin-bottom: 5px;">
+      <!-- 保存完了のメッセージを表示する部屋 -->
+      <div id="configMessage" class="configMessage"></div>
+      <!-- 保存ボタン -->
+      <div class="savebtn">
+        <button class="md-save" onclick="saveGasUrl()">保存</button>
+      </div>
+      <!-- 初回利用者用 -->
+      <div class="setting-divider" style="margin-bottom: 12px; padding-bottom: 12px;">
+        <p class="sec-ttl" style="border-left: none">💡 初めて使用される方へ</p>
+        <a href="https://docs.google.com/spreadsheets/d/1eWn-RLpsu_b-dz2MAWwKJCenP8LslAzI5T1tJAcoF1Y/copy" target="_blank" class="config-template-btn" style="margin-bottom: 8px">
+          スプレッドシートのコピーを作成</a>
+        <!-- GASアプリURLの取得方法 -->
+        <details>
+          <summary class="sec-ttl" style="border-left: none; color:#5a4542">初回立ち上げ設定<span style="font-size: .65rem; color:#6d5652"> タップで表示</span></summary>
+          <ol class="md-ol" style="margin-bottom: -5px">
+          <li>
+            <details>
+              <summary>コピーしたシートの共有設定を変更する<span style="font-size: .65rem; color:#6d5652"> タップで表示 </span></summary>
+                <p style="margin-top: 6px; font-size: .65rem">一般的なアクセスの設定を「リンクを知っている全員」「編集者」に変更する</p>
+            </details>
+          </li>
+            <li>上のメニューから拡張機能」→「Apps Script」を開く</li>
+          <li>
+            <details>
+              <summary>トリガーを追加する<span style="font-size: .65rem; color:#6d5652"> タップで表示 </span></summary>
+              <ol class="md-sub-ol">
+                <li>左メニューの時計マーク「トリガー」を押す</li>
+                <li>右下の「＋ トリガーを追加」を押す</li>
+                <li>実行する関数を「onEditInstalled」、イベントの種類を「編集時」にして保存を押す</li>
+                <li>Googleの警告画面が出たら「詳細」→「刀剣カウンターに移動」→「許可」の順に進む</li>
+              </ol> 
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>GASウェブアプリURLを取得する<span style="font-size: .65rem; color:#6d5652"> タップで表示 </span></summary>
+              <ol class="md-sub-ol">
+                <li>右上の青い「デプロイ」→「新しいデプロイ」を押す</li>
+                <li>歯車マークが「ウェブアプリ」なのを確認</li>
+                <li>次のユーザーとして実行を「自分」、アクセスできるユーザーを「全員」に変更してデプロイを押す</li>
+                <li>発行された「ウェブアプリURL」をコピー</li>
+              </ol>
+            </details>
+           </li>
+        </ol>
+        </details>
+      </div>
       
       <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
-        <button class="md-cls" style="margin: 0; min-width: 70px;" onclick="saveGasUrl()">保存</button>
-        <button class="md-cls" style="margin: 0; min-width: 70px; background: #eaddd7; color: #5a4542;" onclick="toggleConfigModal(false)">閉じる</button>
+        <button class="md-cls" onclick="toggleConfigModal(false)">閉じる</button>
       </div>
     </div>
   </div>
