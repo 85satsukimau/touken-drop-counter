@@ -251,8 +251,11 @@
     /* タブの設定 */
     /* タブの外枠のデザイン CSS */
     .tabs{
+      box-sizing:border-box;
+      width:100%;
+      max-width:530px;
       display:flex;
-      margin-bottom:6px;
+      margin:0 auto 6px auto;
       padding:2px;
       border:1px solid rgba(122,22,34,.15);
       border-radius:6px;
@@ -290,7 +293,9 @@
     .search-box{
       box-sizing:border-box;
       width:100%;
-      margin-bottom:6px;
+      display:block;
+      max-width:530px;
+      margin:0 auto 6px auto;
       padding:6px 10px;
       border:1px solid #c9b9a9;
       border-radius:6px;
@@ -302,7 +307,8 @@
 
     /* 小見出し（「イベント限定ドロップ」「通常ドロップ」など）の設定 CSS */
     .sec-ttl{
-      margin:6px 2px 4px 2px;
+      max-width:500px;
+      margin:6px auto 4px auto;
       padding-left:4px;
       border-left:3px solid #7a1622;
       font-family:"Yu Mincho","MS Mincho",serif;
@@ -314,9 +320,12 @@
     /* カウンターの設定 */
     /* 各刀剣のカードの基本デザイン CSS */
     .card{
+      max-width:500px;
+      position:relative;
       display:flex;
       align-items:center;
       justify-content:space-between;
+      margin:0 auto;
       margin-bottom:4px;
       padding:4px 10px;
       border:1px solid rgba(122,22,34,.15);
@@ -389,10 +398,12 @@
     /* ドロップ記録タブの設定 */
     /* 表上部ブロック（合計ドロップ数、コピーボタン、スプシボタン）の設定 CSS */
     .rk-hdr{
+      box-sizing:border-box;
+      max-width: 520px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      margin:4px 2px 6px 2px
+      margin:4px auto 6px auto
     }
     /* 合計ドロップ数の日本語のフォントデザイン CSS */
     .tot-sm{
@@ -429,7 +440,8 @@
     /* 表の設定 CSS */
     .rk-tbl{
       width:100%;
-      margin-bottom: 6px;
+      max-width:520px;
+      margin:0 auto 6px auto;
       border:1px solid rgba(122,22,34,.15);
       border-radius:6px;
       border-collapse:collapse;
@@ -629,7 +641,7 @@
     <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
       © 2026 白烏城システム開発
       <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
-        v1.0.5
+        v1.0.6
       </span>
     </p>
   </footer>
