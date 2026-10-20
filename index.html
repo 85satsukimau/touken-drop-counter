@@ -469,18 +469,16 @@
     .rk-tbl td.rk-num{
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:300
     }
-    /* イベントドロップを太字にする */
-    .bold-text{
-      font-weight: bold !important;
-    }
     /* 表の名前のフォントデザイン CSS */
     .rk-tbl td.rk-name{
       font-family:"Yu Mincho","MS Mincho",serif
     }
-    /* イベントドロップを太字にする */
-    .bold-text{
-      font-weight: bold !important;
+    /* イベント限定の行のデザイン */
+    .event-row{
+      background-color: rgba(122, 22, 34, 0.03) !important;
+      font-weight: 500;
     }
+  
     
 
     /* 読み込み中メッセージのフォントデザイン cSS */
@@ -649,7 +647,7 @@
     <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
       © 2026 白烏城システム開発
       <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
-        v1.0.13
+        v1.0.14
       </span>
     </p>
   </footer>
@@ -831,15 +829,19 @@
           // 合計ドロップ数に加算
           total += item.count;
           const tr = document.createElement('tr');
-          // イベント限定ドロップを太字に
-          const idClass = item.isEvent ? 'rk-num bold-text' : 'rk-num';
-          const nameClass = item.isEvent ? 'rk-name bold-text' : 'rk-name';
-          const countClass = item.isEvent ? 'rk-num bold-text' : 'rk-num';
-          // 表にID,名前,ドロップ数を追加
+          const idWeight = item.isEvent ? '600' : 'normal';
+          const nameWeight = item.isEvent ? '700' : 'normal';
+          const countWeight = item.isEvent ? '800' : '500';
+          /* イベント限定行 */
+          if (item.isEvent) {
+            tr.className = 'event-row';
+          }
+          
+          // 表にID,名前,ドロップ数を追加（太さは一貫して美しく統一）
           tr.innerHTML = `
-            <td class="${idClass}">${item.id}</td>
-            <td class="${nameClass}">${item.name}</td>
-            <td class="${countClass}" style="font-weight:500;color:#1e4d2b;">${item.count}</td>
+            <td class="rk-num" style="font-weight:${idWeight};">${item.id}</td>
+            <td class="rk-name" style="font-weight:${nameWeight};">${item.name}</td>
+            <td class="rk-num" style="font-weight:${countWeight};color:#1e4d2b;">${item.count}</td>
           `;
           tbody.appendChild(tr);
         });
