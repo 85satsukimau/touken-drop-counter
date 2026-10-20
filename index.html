@@ -473,6 +473,7 @@
     .rk-tbl td.rk-name{
       font-family:"Yu Mincho","MS Mincho",serif
     }
+    /* イベントドロップを太字にする */
     .bold-text{
       font-weight: bold !important;
     }
@@ -644,7 +645,7 @@
     <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
       © 2026 白烏城システム開発
       <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
-        v1.0.10
+        v1.0.11
       </span>
     </p>
   </footer>
@@ -827,7 +828,9 @@
           total += item.count;
           const tr = document.createElement('tr');
           // イベント限定ドロップを太字に
+          const idClass = item.isEvent ? 'rk-num bold-text' : 'rk-num';
           const nameClass = item.isEvent ? 'rk-name bold-text' : 'rk-name';
+          const countClass = item.isEvent ? 'rk-num bold-text' : 'rk-num';
           // 表にID,名前,ドロップ数を追加
           tr.innerHTML = `
             <td class="rk-num">${item.id}</td>
