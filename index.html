@@ -649,7 +649,7 @@
     <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
       © 2026 白烏城システム開発
       <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
-        v1.0.12
+        v1.0.13
       </span>
     </p>
   </footer>
@@ -837,9 +837,9 @@
           const countClass = item.isEvent ? 'rk-num bold-text' : 'rk-num';
           // 表にID,名前,ドロップ数を追加
           tr.innerHTML = `
-            <td class="rk-num">${item.id}</td>
+            <td class="${idClass}">${item.id}</td>
             <td class="${nameClass}">${item.name}</td>
-            <td class="rk-num" style="font-weight:500;color:#1e4d2b;">${item.count}</td>
+            <td class="${countClass}" style="font-weight:500;color:#1e4d2b;">${item.count}</td>
           `;
           tbody.appendChild(tr);
         });
