@@ -641,7 +641,7 @@
     <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
       © 2026 白烏城システム開発
       <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
-        v1.0.8
+        v1.0.9
       </span>
     </p>
   </footer>
@@ -804,7 +804,7 @@
       // 表を初期化
       const tbody = document.getElementById('recordTableBody');
       tbody.innerHTML = '';
-      // ドロップした男士を多い順に並べる（イベント限定ドロップを上に）
+      // ドロップした男士を多い順に並べる（同じドロップ数ではイベント限定ドロップを上に）
       const loggedItems = allDataList.filter(item => item.count > 0);
       loggedItems.sort((a, b) => {
         if(b.count !== a.count){return b.count - a.count;}
@@ -823,6 +823,8 @@
           // 合計ドロップ数に加算
           total += item.count;
           const tr = document.createElement('tr');
+          // イベント限定ドロップを太字に
+          const nameStyle = item.isEvent ? 'style="font-weight:bold;"' : '';
           // 表にID,名前,ドロップ数を追加
           tr.innerHTML = `
             <td class="rk-num">${item.id}</td>
