@@ -193,7 +193,7 @@
         return;
       }
       // 入力はあるが、末尾が「/exec」になっていないなどGASアプリのURLではない場合のガード
-      if (!url.startsWith("https://google.com") || !url.includes("/exec")) {
+      if (!url.startsWith("https://script.google.com") || !url.includes("/exec")) {
         msgEl.innerText = "⚠ 正しいウェブアプリURL（末尾が /exec のもの）を入力してください。";
         msgEl.style.color = "#7a1622";
         msgEl.style.display = "block";
