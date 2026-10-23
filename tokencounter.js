@@ -905,7 +905,7 @@
       localStorage.setItem('刀剣カウンター_LOCAL_EV_NAME', '催物未設定');
       localStorage.setItem('刀剣カウンター_LOCAL_EV_PERIOD', '');
       localStorage.setItem('刀剣カウンター_LOCAL_DATA', JSON.stringify(allDataList));
-      
+
       // スプシ連携している場合は、リセット命令を裏側で飛ばす
       if (currentGasUrl) {
         const targetUrl = `${currentGasUrl}?action=reset`;
@@ -922,10 +922,10 @@
       toggleConfigModal(false);    // 大元の設定モーダルも連動して閉じる
 
       // ブラウザの不細工な標準アラートを撤廃し、優雅な独自トースト通知を実行
-      showCustomToast("🌸 すべてのカウントデータをリセットしました。");
+      showCustomToast("🌸 すべてのデータをリセットしました。");
     }
 
-    // 画面中央に1.8秒間メッセージを浮き上がらせる共通関数
+    // 画面中央にメッセージを浮き上がらせる共通関数
     function showCustomToast(message) {
       // すでにトーストが存在していれば一度消す
       let toast = document.getElementById('customToast');
@@ -938,10 +938,10 @@
       toast.innerText = message;
       // 10ミリ秒だけずらしてクラスを付与（CSSアニメーションを確実に発動させるため）
       setTimeout(() => { toast.classList.add('show'); }, 10);
-      // 1.8秒後に自動でフワッと消す
+      // 1.2秒後に自動でフワッと消す
       setTimeout(() => {
         toast.classList.remove('show');
-      }, 1800);
+      }, 1200);
     }
 
 
