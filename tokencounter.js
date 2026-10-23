@@ -734,36 +734,29 @@
       localStorage.setItem('刀剣カウンター_LOCAL_EV_NAME', name);
       localStorage.setItem('刀剣カウンター_LOCAL_EV_PERIOD', period);
       localStorage.setItem('刀剣カウンター_LOCAL_DATA', JSON.stringify(allDataList));
-      // スプレッドシート連携済みの場合は、GAS側へも同期（従来のカンマ区切り文字列を作って送信）
-      if (currentGasUrl) {
-        msgEl.innerText = "🌸 サイト更新完了。スプレッドシートと同期中...";
-        msgEl.style.color = "#1e4d2b";
-        msgEl.style.display = "block";
-        const dropsRaw = selectedDropIds.join(', '); // スプシ側のためにカンマ区切りに戻す
-        const targetUrl = `${currentGasUrl}?action=setupEvent&eventName=${encodeURIComponent(name)}&period=${encodeURIComponent(period)}&drops=${encodeURIComponent(dropsRaw)}`;
-        fetch(targetUrl, { method: 'GET', mode: 'no-cors' })
-        .then(() => {
-          msgEl.innerText = "🌸 スプレッドシートへの同期が完了しました！";
-          setTimeout(() => { toggleConfigModal(false); }, 1200);
-        })
-        .catch(err => {
-          msgEl.innerText = "⚠ サイト内は更新されましたが、スプレッドシートとの同期に失敗しました。";
-          msgEl.style.color = "#7a1622";
-        });
-      } else {
-        // 未連携ユーザーの場合
-        msgEl.innerText = "🌸 イベント情報をローカルに保存しました！";
-        msgEl.style.color = "#1e4d2b";
-        msgEl.style.display = "block";
-        setTimeout(() => {
-          toggleConfigModal(false);
-          msgEl.style.display = "none"; // 次回のために隠す
-        }, 1200);
-      }
       // メイン画面のカウンターと記録テーブルを最新のフラグ状態で再描画
       renderCounter();
       renderRecord();
+
+      // 通信の成否を待たずに、画面中央に成功トーストを出してモーダルを「即座」に閉じる
+      showCustomToast("🌸 イベント設定を反映しました。");
+      setTimeout(() => {
+        toggleConfigModal(false);
+      }, 100);
+      // スプレッドシート連携済みの場合は、裏側でGAS側へも同期（従来のカンマ区切り文字列を作って送信）
+      if (currentGasUrl) {
+        const dropsRaw = selectedDropIds.join(', ');
+        const targetUrl = `${currentGasUrl}?action=setupEvent&eventName=${encodeURIComponent(name)}&period=${encodeURIComponent(period)}&drops=${encodeURIComponent(dropsRaw)}`;
+        
+        // .then を使わずに通信を投げっぱなしにすることで、ユーザーの操作を1ミリ秒も邪魔しません
+        fetch(targetUrl, { method: 'GET', mode: 'no-cors' })
+        .catch(err => {
+          // 万が一裏側で通信が途切れた場合は、コンソールにのみログを残します
+          console.error("スプレッドシートとのバックグラウンド同期に失敗しました", err);
+        });
+      }
     }
+
 
     // 限定ドロップの検索窓に入力があった時の挙動
     function onDropSearch() {
@@ -884,45 +877,53 @@
     // 実際にデータを更地にする実働部
     function executeDataReset() {
       // 全刀剣データのカウント数を0にリセット
-      allDataList = allDataList.map(item => {
-        item.count = 0;
-        return item;
+      allDataList = allDataList.map((item, index) => {
+        // IDが一致するオリジナルのマスターデータを検索
+        const defaultItem = defaultMasterList.find(d => d.id === item.id);
+        
+        return {
+          id: item.id,
+          name: item.name,
+          count: 0, // カウントを0にリセット
+          isEvent: false, // イベント限定は一斉解除
+          // オリジナルデータが持つ本来のisDefaultフラグを安全に割り当てる
+          isDefault: defaultItem ? (defaultItem.isDefault || false) : false,
+          originalOrder: index
+        };
       });
-
       // 限定ドロップ選択用の配列を完全に空にし、画面上のバッジを初期化
       selectedDropIds = []; // 選択中リストを空にする
       renderDropTags();     // 「限定ドロップが未選択です」の表示に戻す
-
       // 画面のヘッダー情報（催物名・期間）を初期状態へ戻す
       document.getElementById('evName').innerText = '・催物未設定・'; // ★「催物未設定」に統一
       document.getElementById('evPeriod').innerText = '　';
-
       // ログの箱のリセット
       actionLogList = [];
       localStorage.removeItem('刀剣カウンター_ACTION_LOG');
-
       // ローカルストレージを即時リフレッシュ
       localStorage.setItem('刀剣カウンター_LOCAL_EV_NAME', '催物未設定');
       localStorage.setItem('刀剣カウンター_LOCAL_EV_PERIOD', '');
       localStorage.setItem('刀剣カウンター_LOCAL_DATA', JSON.stringify(allDataList));
-
       // スプシ連携している場合は、リセット命令を裏側で飛ばす
       if (currentGasUrl) {
         const targetUrl = `${currentGasUrl}?action=reset`;
         fetch(targetUrl, { method: 'GET', mode: 'no-cors' })
         .catch(err => console.error("リセット同期通信失敗"));
       }
-
+      // 検索ボックスの中身（文字）も綺麗さっぱり消去して、カウンター全体を正常な初期状態に戻す
+      const searchBox = document.getElementById('searchBox');
+      if (searchBox) searchBox.value = '';
+      toggleClearBtn('searchBox', 'searchBoxClear');
       // カウンター画面と記録画面を「0」の状態で再描画
       renderCounter();
       renderRecord();
-
-      // モーダルをすべて閉じる
+      // リセット通知
+      showCustomToast("🌸 すべてのデータをリセットしました。");
+      // 0.1秒後にモーダルをすべて閉じる
+      setTimeout(function(){
       toggleResetModal(false);     // リセット確認モーダルを閉じる
       toggleConfigModal(false);    // 大元の設定モーダルも連動して閉じる
-
-      // ブラウザの不細工な標準アラートを撤廃し、優雅な独自トースト通知を実行
-      showCustomToast("🌸 すべてのデータをリセットしました。");
+      }, 100);
     }
 
     // 画面中央にメッセージを浮き上がらせる共通関数
@@ -938,7 +939,7 @@
       toast.innerText = message;
       // 10ミリ秒だけずらしてクラスを付与（CSSアニメーションを確実に発動させるため）
       setTimeout(() => { toast.classList.add('show'); }, 10);
-      // 1.2秒後に自動でフワッと消す
+      // 1.6秒後に自動でフワッと消す
       setTimeout(() => {
         toast.classList.remove('show');
       }, 1200);
