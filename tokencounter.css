@@ -1,0 +1,817 @@
+ /* 基本のデザイン CSS */
+    body{
+      box-sizing:border-box;
+      min-height:100vh;
+      display: flex;
+      flex-direction: column;
+      margin:0;
+      padding:12px;
+      padding-bottom:40 px;
+      border:8px solid #7a1622;
+      background:#faf6ee;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-weight:300;
+      color:#2c2523;
+    }
+    /* 英数字用のフォントスタイル */
+    .num-style{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-weight:400
+    }
+    /* ヘッダー CSS */
+    header{
+      position:relative;
+      margin:-12px -12px 10px -12px;
+      padding:10px 8px;
+      border-bottom:2px solid #5a0f17;
+      background:#7a1622;
+      text-align:center;
+    }
+    /* 見出し CSS */
+    h1{
+      margin:0 0 7px 0;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:1.05rem;
+      font-weight:400;
+      letter-spacing:.08em;
+      color:#faf6ee;
+    }
+    /* 小見出し */
+    h2{
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.55rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: #eaddd7;
+    }
+    
+    
+    /* イベント情報のデザイン　CSS */
+    .ev-info{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      margin-top:2px;
+    }
+    /* イベント名のフォントスタイル　CSS */
+    .ev-name{
+      display:block;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      font-weight:400;
+      letter-spacing:.03em;
+      color:#faf6ee;
+    }
+    /* イベント期間のフォントスタイル CSS */
+    .ev-pd{
+      display:block;
+      margin-top:2px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-size:.65rem;
+      font-weight:300;
+      color:#eaddd7;
+    }
+
+    /* データ保存ボタン */
+    .hdr-save-btn {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: none;
+    }
+    /* アイコンボタンの中に入る画像（<img>）のサイズ固定 */
+    .hdr-save-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    /* タップしたときはフワッと透明度を下げるフィードバック */
+    .hdr-save-btn:active {
+      opacity: 0.5;
+      transform: scale(0.9);
+    }
+    /* 設定ボタン */
+    .hdr-setting-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: -6px;
+      border:none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background:none;
+      font-size: 1.1rem; /* アイコン（絵文字）の見やすいサイズ */
+      line-height: 1;
+      color: rgba(250, 246, 238, 0.85);
+    }
+    /* ボタンをタップ・クリックしたときのフィードバック */
+    .hdr-setting-btn:active {
+      background: rgba(255, 253, 250, 0.25);
+      transform: scale(0.92);
+    }
+
+
+
+    /* 指南ボタンのデザイン CSS */
+    .gd-btn{
+      position:absolute;top:2px;right:4px;
+      padding:2px 6px;
+      border:1px solid #1e4d2b;
+      border-radius:4px;
+      cursor:pointer;
+      background:#2c2523;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.7rem;
+      font-weight:400;
+      color:#fff;
+    }
+
+    /* 指南ボタンを押した際のポップアップ設定 */
+    /* ポップアップ以外を暗くする暗幕の通常時の設定 CSS */
+    .md-ov{
+      position:fixed;top:0;left:0;width:100vw;height:100vh;
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow-y: auto;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .2s;
+      background:rgba(44,37,35,.6);
+    }
+    /* ポップアップを開くと出現 CSS */
+    .md-ov.open{
+      pointer-events:auto;
+      opacity:1;
+    }
+    /* ポップアップのデザイン CSS */
+    .md-ct{
+      box-sizing:border-box;
+      width:85%;max-width:320px;max-height: 75vh;
+      position:relative;
+      overflow-y: auto;
+      padding:14px;
+      border:4px solid #7a1622;
+      border-radius:8px;
+      background:#faf6ee;
+    }
+    /* ポップアップのタイトルのフォントスタイル CSS */
+    .md-ttl{
+      margin-bottom:10px;
+      padding-bottom:4px;
+      border-bottom:1px solid rgba(122,22,34,0.2);
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.95rem;
+      font-weight:500;
+      color:#7a1622;
+    }
+    /* ポップアップのサブタイトルのフォントスタイル CSS */
+    .md-subttl{
+      display:table;
+      margin:16px auto 10px auto;
+      padding:4px 20px 4px 20px;
+      border-bottom:1px solid rgba(122,22,34,0.2);
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      font-weight:500;
+      color:#7a1622;
+    }
+    /* ボップアップ内の標準テキスト */
+    .md-txt{
+      margin-top:1px;
+      margin-bottom:10px;
+      text-align:center;
+      font-size:0.75rem;
+      line-height:1.4;
+      color:#6d5652;
+    }
+    /* ポップアップのリストのフォントスタイル CSS */
+    .md-ol{
+      margin-top:12px;
+      padding-left:18px;
+      text-align: left;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      line-height:1.5;
+    }
+    /* ポップアップリストの各項目のフォントスタイル CSS */
+    .md-ol li{
+      margin-bottom:6px
+    }
+    /* ポップアップの閉じるボタンの設定 CSS */
+    .md-cls{
+      position: absolute;
+      top: 10px; right: 12px;
+      z-index: 1020;
+      padding: 4px;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      font-family: sans-serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1;
+      color: #8c7672;
+    }
+    /* タップした瞬間に臙脂（えんじ）色に変化 */
+    .md-cls:hover, .md-cls:active {
+      color: #7a1622; 
+    }
+
+     /* ポップアップのキャンセルボタンの設定 CSS */
+    .md-cncl{
+      display:block;
+      min-width:70px;
+      margin:0 auto;
+      padding:4px 0;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:#eaddd7;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      color:#5a4542;
+    }
+
+    /* ✨ ボタンを離したあとも、余韻を持ってゆっくり元のサイズに戻るように設定 */
+    .md-save, 
+    .md-cncl, 
+    .cp-btn, 
+    .ss-btn {
+      transition: transform 0.2s ease-out, opacity 0.2s ease-out, background-color 0.2s ease-out;
+    }
+    /* 設定モーダル内の主要ボタン（更新、リセット、キャンセル等）のタップフィードバック */
+    .md-save:active, 
+    .md-cncl:active, 
+    .cp-btn:active, 
+    .ss-btn:active {
+      transform: scale(0.92); /* 押した瞬間にわずかに縮む（凹むような演出） */
+      opacity: 0.85;          /* わずかに色を薄く（または暗く）する */
+      transition: transform 0s; /* 押した瞬間はキレよく一瞬で凹むようにする */
+    }
+    /* 「🚨データリセット」ボタン専用のタップフィードバック（より慎重な操作のため） */
+    .md-save[onclick*="toggleResetModal"]:active {
+      background: #5a0f17 !important; /* 押した瞬間、さらに濃い臙脂色に変化 */
+    }
+
+
+    /* 指南ポップアップ内の補足・インフォメーション領域 */
+    .md-info-sec {
+      margin: 5px 0 10px 0;
+      padding: 0 0 10px 0;
+      border-bottom: 1px dashed rgba(122,22,34,0.15);
+      text-align: left;
+      font-size: 0.72rem;
+      line-height: 1.5;
+      color: #5a4542;
+    }
+    .md-info-sec ul {
+      margin: 2px 0 8px 0;
+      padding-left: 14px;
+      list-style-type: '・';
+    }
+
+    /* 指南ポップアップ内のセキュリティ・安全ガードの箱 */
+    .md-safety-box {
+      margin:10px 0;
+      padding: 6px;
+      border-radius: 4px;
+      background: rgba(122, 22, 34, 0.02);
+      text-align: left;
+      font-size: 0.68rem;
+      line-height: 1.4;
+      color: #8c7672;
+    }
+
+
+    /* 設定ポップアップの設定 CSS */
+    /* 保存完了メッセージの設定 CSS */
+    .configMessage{
+      display: none;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #1e4d2b;
+    }
+    /* 保存ボタンを置く箱の設定 */
+    .savebtn{
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+    }
+    /* 保存ボタンの設定 */
+    .md-save{
+      display:block;
+      min-width:70px;
+      margin:0;
+      padding:4px 0;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:#7a1622;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      color:#faf6ee;
+    }
+    /* 区切り線 */
+    .setting-divider{
+      border-bottom: 1px dashed rgba(122,22,34,0.15);
+      text-align: center;
+    }
+    /* 「スプレッドシートをコピー」ボタンの設定 CSS */
+    .config-template-btn {
+      width: 85%;
+      display: inline-block;
+      padding: 5px 0;
+      border: 1px solid #7a1622;
+      border-radius: 4px;
+      background: rgba(122, 22, 34, 0.03);
+      transition: background 0.2s;
+      text-align: center;
+      text-decoration: none !important;
+      font-family: "Yu Mincho", "MS Mincho", serif;
+      font-size: 0.7rem !important;
+      font-weight: 500;
+      line-height: 1.2;
+      color: #7a1622 !important;
+    }
+    /* タップで表示されるサブリストの設定 */
+    .md-sub-ul{
+      margin-top: 6px;
+      padding-left: 20px;
+      font-size: .74rem;
+      line-height:1.4;
+    }
+    .md-sub-ol{
+      margin-top: 6px;
+      padding-left: 20px;
+      font-size: .74rem;
+      line-height:1.4;
+    }
+    /* サブリストのフォントスタイル CSS */
+    .md-sub-ol li{
+      margin-bottom:6px
+    }
+
+    /* ボタンの上にマウスが乗ったときの設定 */
+    .config-template-btn:hover {
+      background: rgba(122, 22, 34, 0.08);
+      text-decoration: none !important;     /* マウスが乗ったときの下線を消す */
+    }
+
+    /* ✨ ブラウザ標準のアラートに代わる、画面中央にフワッと浮き出る和風トースト通知 */
+    .custom-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      z-index: 2000;
+      padding: 12px 24px;
+      border: 2px solid #7a1622;
+      border-radius: 6px;
+      background: #faf6ee;
+      box-shadow: 0 4px 15px rgba(44,37,35,0.25);
+      font-family: "Yu Mincho", "MS Mincho", serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1e4d2b; /* 成功を表す深緑 */
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    /* トーストが出現するときのクラス */
+    .custom-toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    
+    /* タブの設定 */
+    /* タブの外枠のデザイン CSS */
+    .tabs{
+      box-sizing:border-box;
+      width:100%;
+      max-width:630px;
+      display:flex;
+      margin:0 auto 6px auto;
+      padding:2px;
+      border:1px solid rgba(122,22,34,.15);
+      border-radius:6px;
+      background:rgba(122,22,34,.05);
+    }
+    /* タブボタンのデフォルトのデザイン CSS */
+    .tab-btn{
+      flex:1;
+      padding:5px;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:none;
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      color:#7a1622;
+    }
+    /* タブボタンを選択した際のデザイン CSS */
+    .tab-btn.active{
+      background:#7a1622;
+      font-weight:500;
+      color:#faf6ee;
+    }
+    /* タブ切り替えの設定（選択していないタブを非表示） CSS */
+    .view-panel{
+      display:none
+    }
+    /* 選択されたタブのみ表示 CSS */
+    .view-panel.active{
+      display:block
+    }
+    
+    /* 検索ボックスの設定 */
+    /* 検索ボックスとクリアボタンを重ねるための外枠 */
+    .search-wrapper {
+      width: 100%;
+      max-width: 630px;
+      position: relative;
+      margin: 0 auto 6px auto;
+    }
+
+    /* 検索ボックス本体の設定 CSS */
+    .search-box{
+      box-sizing:border-box;
+      width:100%;
+      display:block;
+      max-width:630px;
+      margin:0 auto 6px auto;
+      padding:6px 10px;
+      border:1px solid #c9b9a9;
+      border-radius:6px;
+      outline:none;
+      background:rgba(255,253,250,.9);
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.85rem;
+    }
+
+    /* 検索ボックスの右側にボタンが重なるためのインナースペースを確保 */
+    .search-wrapper .search-box {
+      margin-bottom: 0 !important; /* 外枠で余白を管理するため0にする */
+      padding-right: 10px; /* 文字がバツボタンと被らないように右側に隙間をあける */
+    }
+    
+    /* 文字が入力され、バツボタンが出現したときだけ右側に隙間を作る */
+    .search-wrapper .search-box.has-clear-btn {
+      padding-right: 32px; /* ボタンと文字が被らないように、この瞬間だけ右側をあける */
+    }
+
+    /* 入力全削除（クリア）ボタンのデザイン */
+    .search-clear-btn {
+      position: absolute;
+      top: 50%; right: 10px;
+      transform: translateY(-50%);
+      z-index: 5;
+      display: none; /* 文字が入力されるまで初期状態は非表示 */
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 2px 6px;
+      background: none;
+      font-family: sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1;
+      color: #bcaaa4; /* 通常時は目立たない淡いアースカラー */
+    }
+    .search-clear-btn:hover, .search-clear-btn:active {
+      color: #7a1622; /* タップした瞬間に臙脂（えんじ）色に変化 */
+    }
+
+
+    
+
+    /* 小見出し（「イベント限定ドロップ」「通常ドロップ」など）の設定 CSS */
+    .sec-ttl{
+      max-width:600px;
+      margin:6px auto 4px auto;
+      padding-left:4px;
+      border-left:3px solid #7a1622;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      font-weight:500;
+      color:#7a1622;
+    }
+    
+    /* カウンターの設定 */
+    /* 各刀剣のカードの基本デザイン CSS */
+    .card{
+      max-width:600px;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:0 auto;
+      margin-bottom:4px;
+      padding:4px 10px;
+      border:1px solid rgba(122,22,34,.15);
+      border-radius:6px;
+      background:rgba(255,253,250,.95);
+    }
+    /* 名前とIDボックスを縦に配置 CSS */
+    .name-box{
+      display:flex;
+      flex-direction:column
+    }
+    /* 名前のフォントデザイン CSS */
+    .name{
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.9rem;
+      font-weight:400;
+    }
+    /* IDのフォントデザイン CSS */
+    .id{
+      margin-top:1px;
+      font-size:.65rem;
+      font-weight:300;
+      color:#8c7672;
+    }
+
+   /* タップ時の変化数（+1 / -1）の浮かび上がる通知 */
+    .floating-notice {
+      position: absolute;
+      bottom: 100%; /* カウント数の文字のすぐ上のラインを基準にする */
+      left: 50%;
+      transform: translateX(-50%); /* 中央揃え */
+      margin-bottom: 2px; /* カウント数との間のわずかな隙間 */
+      font-size: 0.85rem;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    /* フワッと浮き上がって消えるアニメーション用のクラス */
+    .floating-notice.show-plus {
+      color: #1e4d2b; /* プラスは緑色 */
+      animation: floatUpCenter 1.2s ease-out forwards;
+    }
+    .floating-notice.show-minus {
+      color: #7a1622; /* マイナスは臙脂色 */
+      animation: floatUpCenter 1.2s ease-out forwards;
+    }
+    /* 穏やかにフワッと湧き出て消えるアニメーション */
+    @keyframes floatUpCenter {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(2px) scale(0.9); /* しゃがみこみを無くし、少し小さな状態からスタート */
+      }
+      25% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0px) scale(1); /* 25%の時点で等倍になり、完全に目が合います */
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-6px) scale(1); /* 激しいジャンプを抑え、上空へわずか6pxだけ優しく浮遊して消えます */
+      }
+    }
+
+    /* ボタン領域全体の設定 CSS */
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:8px
+    }
+    /* ボタンの共通デザイン CSS */
+    .btn{
+      width:34px;height:34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:1.1rem;
+      font-weight:400;
+    }
+    /* -ボタンのデザイン CSS */
+    .btn-minus{
+      background:#eaddd7;
+      color:#5a4542
+    }
+    /* +ボタンのデザイン CSS */
+    .btn-plus{
+      background:#7a1622;
+      color:#faf6ee
+    }
+    /* カウント（デフォルト時）のデザイン CSS */
+    .count{
+      min-width:24px;
+      text-align:center;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-size:1.1rem;
+      font-weight:350;
+      color:#6d5652;
+    }
+    /* カウント（1以上時）のデザイン CSS */
+    .count.has-value{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      font-weight:450;
+      color:#1e4d2b;
+    }
+    
+    /* ドロップ記録タブの設定 */
+    /* 表上部ブロック（合計ドロップ数、コピーボタン、スプシボタン）の設定 CSS */
+    .rk-hdr{
+      box-sizing:border-box;
+      max-width: 620px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:4px auto 6px auto
+    }
+    /* 合計ドロップ数の日本語のフォントデザイン CSS */
+    .tot-sm{
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.8rem;
+      color:#1e4d2b;
+    }
+    /* 合計ドロップ数の数字のフォントデザイン CSS */
+    .tot-num{
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.95rem;
+      font-weight:400;
+    }
+    /* ボタンセットの設定 CSS */
+    .hdr-btn-set{
+      display:flex;
+      gap:6px
+    }
+    /* コピーボタン、スプシボタンの設定 CSS */
+    .cp-btn,.ss-btn{
+      display:inline-block;
+      min-width:76px;
+      padding:4px 12px;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      background:#7a1622;
+      text-align:center;
+      text-decoration:none;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.75rem;
+      color:#faf6ee;
+    }
+    /* 表の設定 CSS */
+    .rk-tbl{
+      width:100%;
+      max-width:622px;
+      margin:0 auto 6px auto;
+      border:1px solid rgba(122,22,34,.15);
+      border-radius:6px;
+      border-collapse:collapse;
+      background:rgba(255,253,250,.95);
+      overflow:hidden;
+      font-size:.8rem
+    }
+    /* 表の見出しの設定 CSS */
+    .rk-tbl th{
+      padding:6px;
+      background:#7a1622;
+      text-align:left;
+      font-weight:400;
+      color:#faf6ee;
+    }
+    /* 表の中身の設定 CSS */
+    .rk-tbl td{
+      padding:6px;border-bottom:1px solid rgba(122,22,34,.1)
+    }
+    /* 表の一番下の行の設定 CSS */
+    .rk-tbl tr:last-child td{
+      border-bottom:none
+    }
+    /* 表の数字のフォントデザイン CSS */
+    .rk-tbl td.rk-num{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:300
+    }
+    /* 表の名前のフォントデザイン CSS */
+    .rk-tbl td.rk-name{
+      font-family:"Yu Mincho","MS Mincho",serif
+    }
+    /* イベント限定の行のデザイン */
+    .event-row{
+      background-color: rgba(122, 22, 34, 0.03) !important;
+    }
+  
+    
+
+    /* 読み込み中メッセージのフォントデザイン cSS */
+    .loading{
+      padding:20px;
+      text-align:center;
+      font-family:"Yu Mincho","MS Mincho",serif;
+      font-size:.85rem;
+      color:#6d5652;
+    }
+
+
+    /* イベント限定ドロップ登録 */
+    /* サジェスト（予測候補）リストの浮き出る箱 */
+    .suggest-list {
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      z-index: 1010;
+      max-height: 160px;
+      overflow-y: auto;
+      border: 1px solid #7a1622;
+      border-radius: 0 0 6px 6px;
+      background: #fffdfa;
+      box-shadow: 0 4px 8px rgba(44,37,35,0.15);
+      display: none; /* 通常時は非表示 */
+    }
+    /* 候補リスト内の各男士の行 */
+    .suggest-item {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(122,22,34,0.08);
+      cursor: pointer;
+      text-align: left;
+      font-family: "Yu Mincho", "MS Mincho", serif;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .suggest-item:last-child { border-bottom: none; }
+    .suggest-item:hover { background: rgba(122, 22, 34, 0.05); }
+
+    /* 選択された刀剣バッジ（付箋のような上品な和風テイスト） */
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border: 1px solid #7a1622;
+      border-radius: 4px;
+      background: rgba(122, 22, 34, 0.04);
+      font-family: "Yu Mincho", "MS Mincho", serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #7a1622;
+    }
+    /* バッジの中の削除ボタン(×) */
+    .tag-del-btn {
+      cursor: pointer;
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #8c7672;
+      padding: 0 2px;
+    }
+    .tag-del-btn:hover { color: #7a1622; }
+
+    .selectedDropsContainer{
+      min-height: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      padding: 4px;
+    }
+
+    /* 履歴log */
+    .logAco{
+      margin: 12px 0;
+      padding: 12px 0;
+      border-block: 1px dashed rgba(122,22,34,0.15);
+    }
+
+    .logContainer{
+      max-height:150px;
+      overflow-y:auto;
+      margin-top:6px;
+      padding:6px;
+      border-radius:4px;
+      background:rgba(122,22,34,0.02);
+      text-align:left;
+      font-size:0.7rem;
+      line-height:1.5;
+      color:#5a4542;}
