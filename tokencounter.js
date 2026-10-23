@@ -883,37 +883,41 @@
 
     // 実際にデータを更地にする実働部
     function executeDataReset() {
-      // 1. 全刀剣データのカウント数を0にリセット
+      // 全刀剣データのカウント数を0にリセット
       allDataList = allDataList.map(item => {
         item.count = 0;
         return item;
       });
 
-      // 2. 画面のヘッダー情報（催物名・期間）を初期状態へ戻す
+      // 限定ドロップ選択用の配列を完全に空にし、画面上のバッジを初期化
+      selectedDropIds = []; // 選択中リストを空にする
+      renderDropTags();     // 「限定ドロップが未選択です」の表示に戻す
+
+      // 画面のヘッダー情報（催物名・期間）を初期状態へ戻す
       document.getElementById('evName').innerText = '・催物未設定・'; // ★「催物未設定」に統一
       document.getElementById('evPeriod').innerText = '　';
 
-      // 3. ログの箱も綺麗に更地にする
+      // ログの箱のリセット
       actionLogList = [];
       localStorage.removeItem('刀剣カウンター_ACTION_LOG');
 
-      // 4. ローカルストレージを即時リフレッシュ
+      // ローカルストレージを即時リフレッシュ
       localStorage.setItem('刀剣カウンター_LOCAL_EV_NAME', '催物未設定');
       localStorage.setItem('刀剣カウンター_LOCAL_EV_PERIOD', '');
       localStorage.setItem('刀剣カウンター_LOCAL_DATA', JSON.stringify(allDataList));
-
-      // 5. スプシ連携している場合は、リセット命令を裏側で飛ばす
+      
+      // スプシ連携している場合は、リセット命令を裏側で飛ばす
       if (currentGasUrl) {
-        const targetUrl = `${currentGasUrl}?action=setupEvent&eventName=${encodeURIComponent('催物未設定')}&period=&drops=`;
+        const targetUrl = `${currentGasUrl}?action=reset`;
         fetch(targetUrl, { method: 'GET', mode: 'no-cors' })
         .catch(err => console.error("リセット同期通信失敗"));
       }
 
-      // 6. カウンター画面と記録画面を「0」の更地状態で再描画
+      // カウンター画面と記録画面を「0」の状態で再描画
       renderCounter();
       renderRecord();
 
-      // 7. モーダルをすべて閉じる
+      // モーダルをすべて閉じる
       toggleResetModal(false);     // リセット確認モーダルを閉じる
       toggleConfigModal(false);    // 大元の設定モーダルも連動して閉じる
 
