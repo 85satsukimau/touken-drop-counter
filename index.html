@@ -22,13 +22,11 @@
   </script>
 </head>
 
-
-
 <body>
 
   <!-- ヘッダー -->
   <header>
-    <div style="position:absolute; top:-4px; right:-4px; display:flex; gap: 0px; align-items:center;">
+    <div style="position:absolute; top:-4px; right:-4px; display:flex; gap: 1px; align-items:center;">
       <!-- データ保存ボタン -->
       <button type="button" class="hdr-save-btn" title="データの保存・引継" onclick="toggleBackupModal(true)"><img src="save.svg" alt="保存"></button>
       <!-- 設定ボタン -->
@@ -44,42 +42,49 @@
     </div>
   </header>
 
+  <!-- ポップアップ類 -->
+    <!-- 指南ボタンのポップアップ -->
+    <!-- 背景の暗幕 -->
+    <div class="md-ov" id="guideModal" onclick="toggleModal(false)">
+      <!-- ポップアップ本体 -->
+      <div class="md-ct" onclick="event.stopPropagation()">
+        <!-- 使用方法 -->
+        <div class="md-ttl">使用方法</div>
+          <ol class="md-ol">
+            <li>右上の設定ボタンからイベント名、イベント期間、限定ドロップ刀剣を登録する</li>
+            <li>カウンターでドロップ刀剣をカウント</li>
+            <li>イベントが終了したらドロップ記録タブの「コピー」ボタンから表形式でドロップ記録を保存</li>
+            <li>リセットボタンを押す</li>
+          </ol>
 
-  <!-- 指南ボタンのポップアップ -->
-  <div class="md-ov" id="guideModal" onclick="toggleModal(false)">
-    <div class="md-ct" onclick="event.stopPropagation()">
-      <div class="md-ttl">使用方法</div>
-      <ol class="md-ol">
-        <li>右上の設定ボタンからイベント名、イベント期間、限定ドロップ刀剣を登録する</li>
-        <li>カウンターでドロップ刀剣をカウント</li>
-        <li>イベントが終了したらドロップ記録タブの「コピー」ボタンから表形式でドロップ記録を保存</li>
-        <li>リセットボタンを押す</li>
-      </ol>
-      <!-- 補足情報・セキュリティについて -->
-      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(122,22,34,0.15);">
-        <!-- 豆知識（Logとスプシ同期） -->
-        <div class="md-info-sec">
-          <span style="color: #7a1622; font-weight: bold;">💡 便利な機能</span>
-          <ul>
-            <li>リストにない刀剣は検索からカウントすると最下部に表示されます</li>
-            <li>過去のカウント履歴（Log）は、右上の設定（⚙）から新着順で確認できます。</li>
-            <li>複数端末でリアルタイムにデータを同期したい場合は、設定内から「スプレッドシート連携」を行うと便利です。</li>
-          </ul>
+        <!-- 補足情報・セキュリティについて -->
+        <div style="padding-top: 15px; border-top: 1px dashed rgba(122,22,34,0.15);">
+          <!-- 豆知識（Logとスプシ同期） -->
+          <div class="md-info-sec">
+            <span style="color: #7a1622; font-weight: bold;">💡 便利な機能</span>
+              <ul>
+                <li>リストにない刀剣は検索からカウントすると最下部に表示されます</li>
+                <li>過去のカウント履歴（Log）は、右上の設定（⚙）から新着順で確認できます。</li>
+                <li>複数端末でリアルタイムにデータを同期したい場合は、設定内から「スプレッドシート連携」を行うと便利です。</li>
+              </ul>
+          </div>
+          <!-- 安全性について -->
+          <div class="md-safety-box">
+            <span style="color: #1e4d2b; font-weight: bold;">🛡 安全性について</span><br>
+            当ツールに入力された情報やGASウェブアプリのURL、Googleアカウントなどの個人情報が外部へ共有・送信されることは一切ありません。
+            データはすべてご自身のブラウザまたはスプレッドシート内のみで安全に管理されます。
+          </div>
         </div>
-        
-        <!-- 安全性について -->
-        <div class="md-safety-box">
-          <span style="color: #1e4d2b; font-weight: bold;">🛡 安全性について</span><br>
-          当ツールに入力された情報やGASウェブアプリのURL、Googleアカウントなどの個人情報が外部へ共有・送信されることは一切ありません。データはすべてご自身のブラウザまたはスプレッドシート内のみで安全に管理されます。
-        </div>
-      <button type="button" class="md-cls" onclick="toggleModal(false)">×</button>
+
+        <!-- 閉じるボタン -->
+        <button type="button" class="md-cls" onclick="toggleModal(false)">×</button>
+
       </div>
     </div>
-  </div>
 
-  <!-- 設定ボタンポップアップ -->
-   <div class="md-ov" id="configModal" onclick="toggleConfigModal(false)">
-    <div class="md-ct" onclick="event.stopPropagation()">
+   <!-- 設定ボタンポップアップ -->
+    <div class="md-ov" id="configModal" onclick="toggleConfigModal(false)">
+     <div class="md-ct" onclick="event.stopPropagation()">
       <div class="md-ttl">設定</div>
 
         <!-- イベント情報の直接編集フォーム（未連携・連携両対応） -->
@@ -116,7 +121,7 @@
       <!-- 履歴（Log）確認アコーディオン -->
       <div class="logAco">
         <details onclick="loadEventLog()">
-          <summary class="sec-ttl" style="border-left: none; cursor: pointer; text-align: center;">
+          <summary class="sec-ttl" style="margin-bottom:-4px; border-left: none; cursor: pointer; text-align: center;">
             カウント履歴（Log）を確認する 
             <span style="font-size: .65rem; color:#6d5652">
               タップで表示</span></summary>
@@ -127,46 +132,44 @@
         </details>
       </div>
 
-      <!-- 次イベント用のデータリセットボタン -->
-      <div style="margin:20px 0; text-align: center;">
-        <button type="button" class="md-save" style="width: 100%; padding: 6px 0;" onclick="toggleResetModal(true)">
-          🚨 データリセット
-        </button>
-      </div>
+        <!-- 次イベント用のデータリセットボタン -->
+        <div style="margin:0 0 20px 0; text-align: center;">
+          <button type="button" class="md-save" style="width: 100%; padding: 6px 0;" onclick="toggleResetModal(true)">
+            🚨 データリセット
+          </button>
+        </div>
 
-      
-      <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+        <!-- 閉じるボタン -->
         <button type="button" class="md-cls" onclick="toggleConfigModal(false)">×</button>
       </div>
     </div>
-  </div>
 
-
-  <!-- リセット確認専用のポップアップモーダル -->
-  <div class="md-ov" id="resetConfirmModal" onclick="toggleResetModal(false)">
-    <div class="md-ct" onclick="event.stopPropagation()">
-      <div class="md-ttl" style="color: #7a1622; font-weight: bold;">
-        🚨 データの完全消去
+      <!-- リセット確認専用のポップアップモーダル -->
+      <div class="md-ov" id="resetConfirmModal" onclick="toggleResetModal(false)">
+        <div class="md-ct" onclick="event.stopPropagation()">
+          <div class="md-ttl" style="color: #7a1622; font-weight: bold;">
+            🚨 データの完全消去
+          </div>
+          <p class="md-txt">
+            現在のドロップカウント数がすべて「0」にリセットされ、催物名、限定ドロップも初期化されます。<br>
+            <span style="color: #7a1622; font-weight: bold;">
+              この操作は元に戻せません。
+            </span><br>
+            本当に実行してもよろしいですか？
+          </p>
+          <div style="display: flex; gap: 8px; justify-content: center;">
+              <button type="button" class="md-cncl" style="flex: 1;" onclick="toggleResetModal(false)">
+                キャンセル</button>
+              <button type="button" class="md-save" style="font-weight: bold; flex: 1;" onclick="executeDataReset()">
+                リセットする</button>
+          </div>
+        </div>
       </div>
-      <p class="md-txt">
-        現在のドロップカウント数がすべて「0」にリセットされ、催物名、限定ドロップも初期化されます。<br>
-        <span style="color: #7a1622; font-weight: bold;">
-          この操作は元に戻せません。
-        </span><br>
-        本当に実行してもよろしいですか？
-      </p>
-      <div style="display: flex; gap: 8px; justify-content: center;">
-          <button type="button" class="md-cncl" style="flex: 1;" onclick="toggleResetModal(false)">
-            キャンセル</button>
-          <button type="button" class="md-save" style="font-weight: bold; flex: 1;" onclick="executeDataReset()">
-            リセットする</button>
-      </div>
-    </div>
-  </div>
-
 
   <!-- 保存ボタンポップアップ -->
+    <!-- 背景の暗幕 -->
     <div class="md-ov" id="backupModal" onclick="toggleBackupModal(false)">
+      <!-- 本体 -->
       <div class="md-ct" onclick="event.stopPropagation()">
         <div class="md-ttl">データ保存</div>
 
@@ -191,32 +194,32 @@
 
         <!-- スプシ連携 -->
         <div class="md-subttl">スプレッドシート連携</div>
-        <p class="md-txt">
-          各自のGASウェブアプリURL（末尾が /exec のもの）を貼り付けて保存してください。
-        </p>
-        <!--入力欄 -->
-        <div class="search-wrapper">
-          <input type="text" class="search-box" id="gasUrlInput" placeholder="https://script.google.com/.../exec" style="margin-bottom:10px;" oninput="toggleClearBtn('gasUrlInput', 'gasUrlInputClear')">
-          <button type="button" class="search-clear-btn" id="gasUrlInputClear" onclick="clearAnyInput('gasUrlInput', 'gasUrlInputClear')">×</button>
-        </div>
-        <!-- 保存完了のメッセージを表示する部屋 -->
-        <div class="configMessage" id="gasconfigMessage"></div>
-        <!-- 保存ボタン -->
-        <div class="savebtn"style="margin-bottom:16px">
-          <button type="button" class="md-save" onclick="saveGasUrl()">保存</button>
-        </div>
+          <p class="md-txt">
+            各自のGASウェブアプリURL（末尾が /exec のもの）を貼り付けて保存してください。
+          </p>
+          <!--入力欄 -->
+          <div class="search-wrapper">
+            <input type="text" class="search-box" id="gasUrlInput" placeholder="https://script.google.com/.../exec" style="margin-bottom:10px;" oninput="toggleClearBtn('gasUrlInput', 'gasUrlInputClear')">
+            <button type="button" class="search-clear-btn" id="gasUrlInputClear" onclick="clearAnyInput('gasUrlInput', 'gasUrlInputClear')">×</button>
+          </div>
+          <!-- 保存完了のメッセージを表示する部屋 -->
+          <div class="configMessage" id="gasconfigMessage"></div>
+          <!-- 保存ボタン -->
+          <div class="savebtn"style="margin-bottom:12px">
+            <button type="button" class="md-save" onclick="saveGasUrl()">保存</button>
+          </div>
 
         <!-- 初回利用者用 -->
-        <div class="setting-divider" style="margin-bottom: 12px; padding-bottom: 12px;">
-        <details>
-            <summary class="sec-ttl" style="margin-top:-8px; border-left: none">
+        <div style="text-align:center;">
+          <details>
+            <summary class="sec-ttl" style="border-left: none">
             連携方法</summary>
             <a href="https://docs.google.com/spreadsheets/d/1eWn-RLpsu_b-dz2MAWwKJCenP8LslAzI5T1tJAcoF1Y/copy" target="_blank" class="config-template-btn" style="margin-bottom: 8px">
               スプレッドシートのコピーを作成</a>
             <!-- GASアプリURLの取得方法 -->
               <div class="sec-ttl" style="border-left: none; color:#5a4542">
-               ・ 初回立ち上げ設定 ・</div>
-              <ol class="md-ol" style="margin-bottom: -5px">
+              ・ 初回立ち上げ設定 ・</div>
+              <ol class="md-ol">
               <li>
                 <details>
                   <summary>コピーしたシートの共有設定を変更する<span style="font-size: .65rem; color:#6d5652"> タップで表示 </span></summary>
@@ -249,14 +252,13 @@
             </ol>
           </details>
         </div>
-        <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+        <!-- 閉じるボタン -->
         <button type="button" class="md-cls" onclick="toggleBackupModal(false)">×</button>
-      </div>
       </div>
     </div>
 
 
-  <!-- タブ切り替え -->
+  <!-- タブ切り替えボタン -->
   <div class="tabs">
     <button type="button" class="tab-btn active" onclick="switchTab('counter', this)">カウンター</button>
     <button type="button" class="tab-btn" onclick="switchTab('record', this)">ドロップ記録</button>
@@ -264,10 +266,12 @@
 
   <!-- カウンター画面 -->
   <div class="view-panel active" id="panel-counter">
+    <!-- 検索ボックス -->
     <div class="search-wrapper">
       <input type="text" class="search-box" id="searchBox" placeholder="🔍 名前 または No. で検索（全刀剣から検索可）" oninput="onSearch()">
       <button type="button" class="search-clear-btn" id="searchBoxClear" onclick="clearAnyInput('searchBox', 'searchBoxClear', onSearch)">×</button>
     </div>
+    <!-- カウンター本体 -->
     <div id="counterContainer">
       <div class="loading" id="mainMessage" style="font-size: .9rem; ">
         読込中…
@@ -306,22 +310,23 @@
     </div>
   </div>
 
-<footer style="margin-top: auto !important; margin: 20px -12px -12px -12px; padding: 12px 8px; border-top: 1px solid rgba(122, 22, 34, 0.1); background: rgba(122, 22, 34, 0.02); text-align: center;">
-    <p style="margin: 0 0 4px 0; font-size: 0.6rem; color: #8c7672; line-height: 1.4; letter-spacing: 0.02em; word-break: keep-all;">
-      当ツールは個人が開発した非公式ツールであり、<wbr>
-      「刀剣乱舞」の版権元および運営会社様とは<wbr>一切関係ありません。
-    </p>
-    <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
-      © 2026 白烏城システム開発
-      <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
-        v1.1.4
-      </span>
-    </p>
-  </footer>
+  <!-- フッター -->
+  <footer style="margin-top: auto !important; margin: 20px -12px -12px -12px; padding: 12px 8px; border-top: 1px solid rgba(122, 22, 34, 0.1); background: rgba(122, 22, 34, 0.02); text-align: center;">
+      <p style="margin: 0 0 4px 0; font-size: 0.6rem; color: #8c7672; line-height: 1.4; letter-spacing: 0.02em; word-break: keep-all;">
+        当ツールは個人が開発した非公式ツールであり、<wbr>
+        「刀剣乱舞」の版権元および運営会社様とは<wbr>一切関係ありません。
+      </p>
+      <p class="num-style" style="margin: 0; font-size: 0.55rem; color: #bcaaa4; letter-spacing: 0.05em;">
+        © 2026 白烏城システム開発
+        <span style="margin-left:8px; padding:1px 2px; background:#f4e9e4;">
+          v1.1.5
+        </span>
+      </p>
+    </footer>
 
-
-
+<!-- javascript -->
   <script src="tokencounter.js" defer></script>
   
 </body>
+
 </html>
