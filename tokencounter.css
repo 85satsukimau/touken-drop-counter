@@ -502,6 +502,8 @@
       }
       .suggest-item:last-child { border-bottom: none; }
       .suggest-item:hover { background: rgba(122, 22, 34, 0.05); }
+      /* Tab・矢印キーで選択中の候補 */
+      .suggest-item.active { background: rgba(122, 22, 34, 0.12); }
       
     /* 限定ドロップ表示 */
       /* 限定ドロップ刀剣のバッジが並ぶ部屋 */
