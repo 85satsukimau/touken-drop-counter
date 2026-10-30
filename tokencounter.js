@@ -357,7 +357,7 @@
     inputEl.focus(); // すぐ次の入力を始められるようにフォーカスを戻す
   }
 
-// 💡 検索の連打防止タイマーを管理する変数
+// 検索の連打防止タイマーを管理する変数
 let searchTimer = null;
   
 // 検索ボックスに入力があった場合の挙動
@@ -775,9 +775,6 @@ let searchTimer = null;
 
 
 // 限定ドロップ入力・サジェスト
-  // 画面を何回も描き直さないように、メモリ上に「仮の部屋」を作る
-      const fragment = document.createDocumentFragment();
-
   // 限定ドロップの検索窓に入力があった時の挙動
   function onDropSearch() {
     const query = document.getElementById('dropSearchInput').value.trim().toLowerCase();
@@ -799,11 +796,15 @@ let searchTimer = null;
       listEl.style.display = 'none';
       return;
     }
+    // リストを表示させる
+    listEl.style.display = 'block';
+    // 画面を何回も描き直さないように、メモリ上に「仮の部屋」を作る
+    const fragment = document.createDocumentFragment();
     // 候補をリストとして生成
     matches.forEach(item => {
       const div = document.createElement('div');
       div.className = 'suggest-item';
-      div.setAttribute('tabindex', '0'); // フォーカスを当てるための設定
+      div.setAttribute('tabindex', '-1'); // フォーカスを当てるための設定
       div.setAttribute('data-id', item.id); // IDを保持させる
       div.innerHTML = `<span>${item.name}</span><span class="num-style" style="font-size:0.65rem; color:#8c7672;">No.${item.id}</span>`;
 
@@ -819,9 +820,9 @@ let searchTimer = null;
       };
       fragment.appendChild(div);
     });
-    // リストを表示させる
+    // 候補を結合
     listEl.appendChild(fragment);
-    listEl.style.display = 'block';
+
   }
 
   // 候補から選ばれた刀剣をバッジ（タグ）として追加する（カーソル自動復帰版）
@@ -841,6 +842,7 @@ let searchTimer = null;
     const listEl = document.getElementById('dropSuggestList');
     if (listEl) {
       listEl.style.display = 'none';
+      listEl.innerHTML = ''; // 古い候補（activeが付いた行）を残さない
     }
   }
 
@@ -909,7 +911,7 @@ let searchTimer = null;
 
 
   // データリセット
-      // リセット確認モーダルの開閉（新規追加）
+  // リセット確認モーダルの開閉（新規追加）
   function toggleResetModal(show) {
     const modal = document.getElementById('resetConfirmModal');
     if (show) {
@@ -994,21 +996,25 @@ let searchTimer = null;
 // キーボードアクセシビリティ：Enter送信制御（漢字変換ガード付き）
 document.addEventListener('DOMContentLoaded', function() {
   
-  // 1️⃣ 「設定（イベント情報）」モーダル内の入力欄
+  //「設定（イベント情報）」モーダル内の入力欄
   const eventInputIds = ['inputEvName', 'inputEvPeriod', 'dropSearchInput'];
   eventInputIds.forEach(function(id) {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener('keydown', function(e) {
-        // 💡 【超重要】日本語入力の「漢字変換中」のEnterキーは完全に無視してここで処理を終了する
+        // 日本語入力の「漢字変換中」のEnterキーは無視してここで処理を終了する
         if (e.isComposing || e.keyCode === 229) {
           return; 
         }
         
-        // 漢字変換が終わったあとの、正真正銘の「決定Enter」の時だけ処理を実行
+        // 漢字変換が終わったあとの「決定Enter」の時だけ処理を実行
         if (e.key === 'Enter') {
           // サジェスト項目自体をTabで選択している場合はそちらのEnterを優先するためスキップ
           if (document.activeElement.classList.contains('suggest-item')) return;
+          // 限定ドロップ欄で候補をハイライト中は、Enterは候補の決定に使う
+          if (id === 'dropSearchInput' &&
+              document.getElementById('dropSuggestList').style.display === 'block' &&
+              document.querySelector('#dropSuggestList .suggest-item.active')) return;
           
           e.preventDefault();
           saveEventInfo(); // イベント情報を更新（モーダルが閉じる）
@@ -1017,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // 2️⃣ 「データ保存・スプシ連携」モーダル内の入力欄（空欄ガード付き）
+  //「データ保存・スプシ連携」モーダル内の入力欄（空欄ガード付き）
   const backupInput = document.getElementById('backupDataInput');
   if (backupInput) {
     backupInput.addEventListener('keydown', function(e) {
@@ -1045,9 +1051,67 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+ // 「限定ドロップ」入力欄での Tab キー制御
+  const dropInput = document.getElementById('dropSearchInput');
+  if (dropInput) {
+    dropInput.addEventListener('keydown', function(e) {
+      // 漢字変換中は何もしない
+      if (e.isComposing || e.keyCode === 229) return;
+ 
+      const listEl = document.getElementById('dropSuggestList');
+      if (!listEl || listEl.style.display !== 'block') return;
+ 
+      const items = Array.from(listEl.querySelectorAll('.suggest-item'));
+      if (items.length === 0) return;
+ 
+      const idx = items.findIndex(el => el.classList.contains('active'));
+ 
+      const highlight = function(next) {
+        items.forEach(el => el.classList.remove('active'));
+        items[next].classList.add('active');
+        items[next].scrollIntoView({ block: 'nearest' });
+      };
+ 
+      // Enter：ハイライト中の候補を決定
+      if (e.key === 'Enter' && idx >= 0) {
+        e.preventDefault();
+        addDropTag(items[idx].getAttribute('data-id'));
+        return;
+      }
+ 
+      // Tab：次の候補へ / Shift+Tab：前の候補へ
+      // （端で循環）
+      if (e.key === 'Tab') {
+        e.preventDefault();          // 常にブラウザ標準のTab移動を止める
+        const n = items.length;
+        if (e.shiftKey) {
+          highlight(idx <= 0 ? n - 1 : idx - 1);
+        } else {
+          highlight(idx + 1 >= n ? 0 : idx + 1);
+        }
+        return;
+      }
+
+      // Esc：候補リストだけを閉じる（モーダルは閉じない）
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.stopPropagation();
+        listEl.style.display = 'none';
+        items.forEach(el => el.classList.remove('active'));
+        return;
+      }
+ 
+      // ↓ ↑：Tabと同様にハイライト移動（端で循環）
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const n = items.length;
+        highlight(e.key === 'ArrowDown' ? (idx + 1) % n : (idx - 1 + n) % n);
+      }
+    });
+  }
 });
 
-// ✨ Esc キーが押されたときに開いているすべてのモーダルを閉じる
+// Esc キーが押されたときに開いているすべてのモーダルを閉じる
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' || e.key === 'Esc') {
     // 既存のモーダルを閉じる関数をすべて安全に呼び出す
