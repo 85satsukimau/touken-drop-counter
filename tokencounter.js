@@ -760,7 +760,14 @@ let searchTimer = null;
     }, 100);
     // スプレッドシート連携済みの場合は、裏側でGAS側へも同期（従来のカンマ区切り文字列を作って送信）
     if (currentGasUrl) {
-      const dropsRaw = selectedDropIds.join(', ');
+      // スプレッドシート側は「名前」で照合するため、IDを名前に変換して送る
+      const dropsRaw = selectedDropIds
+        .map(id => {
+          const found = allDataList.find(item => item.id === id);
+          return found ? found.name : null;
+        })
+        .filter(name => name) // 見つからなかったIDは除外
+        .join(', ');
       const targetUrl = `${currentGasUrl}?action=setupEvent&eventName=${encodeURIComponent(name)}&period=${encodeURIComponent(period)}&drops=${encodeURIComponent(dropsRaw)}`;
       
       // .then を使わずに通信を投げっぱなしにすることで、ユーザーの操作を1ミリ秒も邪魔しません
