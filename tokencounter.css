@@ -138,6 +138,17 @@
     line-height: 1;
     color: rgba(250, 246, 238, 0.85);
   }
+    /* アイコンボタンの中に入る画像（<img>）のサイズ固定 */
+  .hdr-setting-btn img {
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+  }
+  /* タップしたときはフワッと透明度を下げるフィードバック */
+  .hdr-setting-btn:active {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
 
   /* ボタンをタップ・クリックしたときのフィードバック */
   .hdr-setting-btn:active {
