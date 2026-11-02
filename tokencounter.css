@@ -140,8 +140,8 @@
   }
     /* アイコンボタンの中に入る画像（<img>）のサイズ固定 */
   .hdr-setting-btn img {
-    width: 50%;
-    height: 50%;
+    width: 75%;
+    height: 75%;
     object-fit: contain;
   }
   /* タップしたときはフワッと透明度を下げるフィードバック */
